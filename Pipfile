@@ -29,6 +29,8 @@ sqlparse = {version = "==0.6.0", markers = "python_version >= \"3.10\""}
 tzdata = {version = "==2026.3", markers = "python_version >= \"2\""}
 urllib3 = {version = "==2.7.0", markers = "python_version >= \"3.10\""}
 psycopg = "*"
+celery = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 
