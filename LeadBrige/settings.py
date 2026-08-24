@@ -25,9 +25,19 @@ SECRET_KEY = 'django-insecure-)8ap@le$y1(yyd2*%q+kf&-kz3)!n#t8&vua3c*iaf%ia@h4*o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-import os
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# import os
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# ALLOWED_HOSTS = os.environ.get(
+#     'ALLOWED_HOSTS',
+#     'localhost,127.0.0.1'
+# ).split(',')
+
+ALLOWED_HOSTS = [
+    "leadbrige-production-36b2.up.railway.app",
+    "localhost",
+    "127.0.0.1",
+]
 
 # Application definition
 
