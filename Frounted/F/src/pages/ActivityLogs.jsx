@@ -1,69 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function ActivityLogs() {
   return (
     <>
 <div className="bg-surface font-body text-on-surface h-full antialiased overflow-hidden flex">
-{/* SideNavBar */}
-<nav className="bg-primary-container dark:bg-tertiary-container docked left h-screen w-64 border-r border-outline-variant fixed left-0 top-0 h-full flex flex-col z-40">
-<div className="p-6">
-<h1 className="text-headline-md font-bold text-on-primary dark:text-inverse-primary tracking-tight">LeadBridge</h1>
-<p className="text-body-sm text-on-primary-container mt-1">B2B Sales CRM</p>
-</div>
-<div className="px-4 pb-4">
-<button className="w-full flex items-center justify-center gap-2 bg-on-primary text-primary-container hover:bg-surface-variant py-2.5 px-4 rounded font-semibold transition-colors">
-<span className="material-symbols-outlined text-sm">add</span>
-                Add Lead
-            </button>
-</div>
-<ul className="flex-1 overflow-y-auto py-2 flex flex-col gap-1 px-2">
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/10 rounded-md transition-colors duration-200" href="#">
-<span className="material-symbols-outlined">dashboard</span>
-<span className="text-label-md font-medium">Dashboard</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/10 rounded-md transition-colors duration-200" href="#">
-<span className="material-symbols-outlined">group</span>
-<span className="text-label-md font-medium">Leads</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/10 rounded-md transition-colors duration-200" href="#">
-<span className="material-symbols-outlined">event_repeat</span>
-<span className="text-label-md font-medium">Follow-ups</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/10 rounded-md transition-colors duration-200" href="#">
-<span className="material-symbols-outlined">notifications</span>
-<span className="text-label-md font-medium">Notifications</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container border-l-4 border-primary dark:border-inverse-primary font-semibold rounded-r-md transition-all opacity-90 scale-95" href="#">
-<span className="material-symbols-outlined"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>history</span>
-<span className="text-label-md">Activity Logs</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/10 rounded-md transition-colors duration-200 mt-auto" href="#">
-<span className="material-symbols-outlined">settings</span>
-<span className="text-label-md font-medium">Settings</span>
-</a>
-</li>
-</ul>
-<div className="p-4 border-t border-outline-variant/20">
-<div className="flex items-center gap-3">
-<img alt="LeadBridge Logo" className="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a female executive in her 30s with dark hair, wearing a navy blazer, smiling subtly against a clean white studio background with soft, bright, even lighting suitable for a B2B SaaS CRM profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBHhOrgs5agbImjsYWVzc7IpBqcOsnD_COkFH1-emswGzdX4jmdL8YxyrRPXefV0tnTcCmIMd0XfVBIPdMSfj5loNhuOnSuHD8Hoyfuwc-cgqXzrQ_t-8kijM3E7KyZPmziRZvigUhC6rviJI5dXnhNJxWIEqO1v3X2PAfilkYmhlumkU9UThqbsc14cP90gCqQ_EKWDILjBsLzDm6K9WDzGyFtT1pRvvlIC-O2ybEStUsIP4WUZDKOw" />
-<div className="flex flex-col">
-<span className="text-label-md font-medium text-on-primary">Admin User</span>
-<span className="text-label-sm text-on-primary-container">admin@leadbridge.io</span>
-</div>
-</div>
-</div>
-</nav>
+<Sidebar active="/activity-logs" />
 {/* Main Content Area */}
 <main className="flex-1 flex flex-col ml-64 h-screen bg-surface">
 {/* TopNavBar */}

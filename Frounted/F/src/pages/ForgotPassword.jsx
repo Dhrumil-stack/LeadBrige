@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   return (
@@ -38,10 +39,10 @@ export default function ForgotPassword() {
 </form>
 {/* Back to Sign In Link */}
 <div className="mt-8 text-center">
-<a className="inline-flex items-center gap-2 text-label-md font-medium text-secondary hover:text-primary transition-colors" href="#">
+<Link className="inline-flex items-center gap-2 text-label-md font-medium text-secondary hover:text-primary transition-colors" to="/login">
 <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                     Back to Sign In
-                </a>
+                </Link>
 </div>
 </div>
 {/* Footer */}

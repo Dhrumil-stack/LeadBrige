@@ -1,54 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function NotificationPreferences() {
   return (
     <>
 <div className="h-full bg-surface-container-lowest font-body text-on-surface flex overflow-hidden">
-{/* SideNavBar */}
-<aside className="bg-primary-container h-full w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col h-screen py-6 z-50">
-<div className="px-6 mb-8 flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
-<span className="material-symbols-outlined text-sm" data-icon="hub"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>hub</span>
-</div>
-<div>
-<h1 className="text-headline-md font-bold text-on-primary tracking-tight leading-none">LeadBridge</h1>
-<p className="text-label-sm font-medium text-on-primary-container">Sales CRM</p>
-</div>
-</div>
-<nav className="flex-1 flex flex-col gap-1 px-2">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span className="text-label-sm font-medium">Dashboard</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="person_search">person_search</span>
-<span className="text-label-sm font-medium">Leads</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
-<span className="text-label-sm font-medium">Follow-ups</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span className="text-label-sm font-medium">Notifications</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="history">history</span>
-<span className="text-label-sm font-medium">Activity Logs</span>
-</a>
-{/* Active State */}
-<a className="flex items-center gap-3 px-4 py-2 border-l-4 border-primary bg-on-primary-container/10 text-on-primary font-semibold rounded-r-lg mt-auto mb-2" href="#">
-<span className="material-symbols-outlined" data-icon="settings">settings</span>
-<span className="text-label-sm font-medium">Settings</span>
-</a>
-</nav>
-<div className="px-6 mt-4">
-<button className="w-full bg-primary text-on-primary py-2 px-4 rounded font-medium text-label-sm hover:bg-primary/90 transition-colors scale-95 transition-transform duration-100 flex items-center justify-center gap-2">
-<span className="material-symbols-outlined text-sm" data-icon="add">add</span>
-                Add New Lead
-            </button>
-</div>
-</aside>
+<Sidebar active="/settings" />
 {/* Main Content Area Wrapper */}
 <div className="flex-1 flex flex-col ml-64 min-h-screen">
 {/* TopNavBar */}

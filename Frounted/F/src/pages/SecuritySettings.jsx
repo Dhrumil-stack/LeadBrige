@@ -1,53 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function SecuritySettings() {
   return (
     <>
 <div className="bg-background text-on-background h-screen flex overflow-hidden">
-{/* SideNavBar */}
-<aside className="h-full w-64 fixed left-0 top-0 bg-primary-container text-on-primary border-r border-outline-variant flex flex-col py-6 z-50">
-<div className="px-6 mb-8 flex items-center gap-3">
-<div className="w-8 h-8 rounded-DEFAULT bg-primary flex items-center justify-center text-on-primary">
-<span className="material-symbols-outlined text-sm" data-icon="leaderboard" data-weight="fill"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>leaderboard</span>
-</div>
-<div>
-<h1 className="text-headline-md font-bold text-on-primary tracking-tight leading-none">LeadBridge</h1>
-<p className="text-label-sm text-on-primary-container mt-1">Sales CRM</p>
-</div>
-</div>
-<nav className="flex-1 px-2 space-y-1">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span className="text-label-md font-medium">Dashboard</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="person_search">person_search</span>
-<span className="text-label-md font-medium">Leads</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
-<span className="text-label-md font-medium">Follow-ups</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span className="text-label-md font-medium">Notifications</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 rounded-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="history">history</span>
-<span className="text-label-md font-medium">Activity Logs</span>
-</a>
-<a className="flex items-center gap-3 px-4 py-2 border-l-4 border-primary bg-on-primary-container/10 text-on-primary font-semibold rounded-r-DEFAULT" href="#">
-<span className="material-symbols-outlined" data-icon="settings" data-weight="fill"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>settings</span>
-<span className="text-label-md">Settings</span>
-</a>
-</nav>
-<div className="px-6 mt-auto">
-<button className="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-2.5 rounded-DEFAULT text-label-md font-medium hover:bg-surface-tint transition-colors">
-<span className="material-symbols-outlined text-[20px]" data-icon="add">add</span>
-                Add New Lead
-            </button>
-</div>
-</aside>
+<Sidebar active="/settings" />
 {/* Main Content Area */}
 <div className="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
 {/* TopNavBar */}
@@ -88,11 +46,10 @@ export default function SecuritySettings() {
 <h2 className="text-headline-lg text-on-surface mb-2">Settings</h2>
 {/* Inner Nav */}
 <div className="flex gap-6 border-b border-outline-variant mt-6">
-<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Profile</a>
-<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Preferences</a>
-<a className="pb-3 text-body-md font-bold text-primary border-b-2 border-primary" href="#">Security</a>
-<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Notifications</a>
-<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Team</a>
+<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="/settings">Profile</a>
+<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="/settings/notifications">Preferences</a>
+<a className="pb-3 text-body-md font-bold text-primary border-b-2 border-primary" href="/settings/security">Security</a>
+<a className="pb-3 text-body-md font-medium text-on-surface-variant hover:text-primary transition-colors" href="/notifications">Notifications</a>
 </div>
 </div>
 {/* Security Content Area */}

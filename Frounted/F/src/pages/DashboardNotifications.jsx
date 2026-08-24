@@ -1,66 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function DashboardNotifications() {
   return (
     <>
 <div className="bg-background text-on-background min-h-screen flex overflow-hidden">
-{/* SideNavBar (Shared Component) */}
-<nav className="bg-primary-container h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col py-6 z-40">
-<div className="px-6 mb-8 flex flex-col gap-1">
-<h1 className="text-[24px] font-headline font-bold text-on-primary tracking-[-0.01em]">LeadBridge</h1>
-<span className="text-[12px] font-label font-semibold text-on-primary-container tracking-[0.05em] uppercase">Sales CRM</span>
-</div>
-<button className="mx-4 mb-6 bg-secondary-container hover:bg-secondary-fixed transition-colors duration-150 text-on-secondary-container font-label text-[14px] font-medium py-2.5 px-4 rounded-md flex items-center justify-center gap-2">
-<span className="material-symbols-outlined text-[20px]">add</span>
-            New Lead
-        </button>
-<ul className="flex flex-col flex-1 space-y-1">
-{/* Active Tab: Dashboard */}
-<li>
-<a className="flex items-center gap-3 px-4 py-3 bg-secondary-fixed-dim/10 text-on-primary border-l-4 border-on-primary-fixed hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium opacity-90 transition-all" href="#">
-<span className="material-symbols-outlined text-[20px]">dashboard</span>
-                    Dashboard
-                </a>
-</li>
-{/* Inactive Tabs */}
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">leaderboard</span>
-                    Leads
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">reorder</span>
-                    Pipeline
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">group</span>
-                    Contacts
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">insights</span>
-                    Analytics
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">settings</span>
-                    Settings
-                </a>
-</li>
-</ul>
-<div className="mt-auto pt-4">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container border-l-4 border-transparent hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 font-body text-[14px] tracking-tight font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">help</span>
-                Help Center
-            </a>
-</div>
-</nav>
+<Sidebar active="/dashboard" />
 {/* Main Content Area */}
 <main className="ml-64 flex-1 flex flex-col h-screen overflow-y-auto bg-surface relative">
 {/* Background Overlay to subtly de-emphasize dashboard content when dropdown is active */}

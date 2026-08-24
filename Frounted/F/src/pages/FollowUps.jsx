@@ -1,61 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function FollowUps() {
   return (
     <>
 <div className="flex h-screen overflow-hidden antialiased text-body-sm">
-{/* SideNavBar */}
-<nav className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 py-xl px-md bg-primary-container text-on-primary-container border-r border-outline-variant z-50">
-<div className="mb-lg px-4 flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-lg">L</div>
-<div>
-<h1 className="text-headline-md font-bold text-on-primary">LeadBridge</h1>
-<p className="text-label-sm text-on-primary-container/70">B2B CRM</p>
-</div>
-</div>
-<button className="mb-lg w-full bg-primary text-on-primary hover:bg-primary/90 transition-colors duration-200 rounded font-label-md py-2 px-4 flex justify-center items-center gap-2">
-<span className="material-symbols-outlined" data-icon="add">add</span>
-            Add Lead
-        </button>
-<ul className="flex-1 space-y-2">
-<li>
-<a className="flex items-center gap-3 text-on-primary-container/70 px-4 py-2 hover:text-on-primary-container hover:bg-on-primary-container/10 transition-all duration-200 cursor-pointer active:translate-x-1 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span className="font-label-md">Dashboard</span>
-</a>
-</li>
-<li>
-<a className="flex items-center gap-3 text-on-primary-container/70 px-4 py-2 hover:text-on-primary-container hover:bg-on-primary-container/10 transition-all duration-200 cursor-pointer active:translate-x-1 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="person_search">person_search</span>
-<span className="font-label-md">Leads</span>
-</a>
-</li>
-<li>
-<a className="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-2 border-l-4 border-primary cursor-pointer active:translate-x-1" href="#">
-<span className="material-symbols-outlined" data-icon="event_repeat" data-weight="fill">event_repeat</span>
-<span className="font-label-md font-semibold">Follow-ups</span>
-</a>
-</li>
-<li>
-<a className="flex items-center gap-3 text-on-primary-container/70 px-4 py-2 hover:text-on-primary-container hover:bg-on-primary-container/10 transition-all duration-200 cursor-pointer active:translate-x-1 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span className="font-label-md">Notifications</span>
-</a>
-</li>
-<li>
-<a className="flex items-center gap-3 text-on-primary-container/70 px-4 py-2 hover:text-on-primary-container hover:bg-on-primary-container/10 transition-all duration-200 cursor-pointer active:translate-x-1 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="history">history</span>
-<span className="font-label-md">Activity Logs</span>
-</a>
-</li>
-</ul>
-<div className="mt-auto">
-<a className="flex items-center gap-3 text-on-primary-container/70 px-4 py-2 hover:text-on-primary-container hover:bg-on-primary-container/10 transition-all duration-200 cursor-pointer active:translate-x-1 rounded-lg" href="#">
-<span className="material-symbols-outlined" data-icon="settings">settings</span>
-<span className="font-label-md">Settings</span>
-</a>
-</div>
-</nav>
+<Sidebar active="/followups" />
 {/* Main Content Area */}
 <div className="flex-1 flex flex-col md:ml-64 relative min-h-screen">
 {/* TopNavBar */}

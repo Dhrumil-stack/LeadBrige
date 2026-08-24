@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function LeadDetails() {
   return (
@@ -9,10 +10,10 @@ export default function LeadDetails() {
 <div className="max-w-container-max mx-auto px-6 lg:px-8">
 <div className="flex items-center justify-between h-16">
 {/* Back Action */}
-<a className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">
+<Link className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-label-md" to="/leads">
 <span className="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
 <span className="">Back to Leads</span>
-</a>
+</Link>
 {/* Header Actions */}
 <div className="flex items-center gap-3">
 <button className="flex items-center justify-center h-10 px-4 rounded-md bg-surface-container-lowest border border-outline-variant text-primary hover:bg-surface-container-low transition-colors text-label-md">

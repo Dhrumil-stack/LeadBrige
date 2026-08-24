@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 import {
   getDashboardStats,
@@ -85,67 +87,7 @@ export default function Dashboard() {
   return (
     <div className="bg-background text-on-background font-body min-h-screen flex flex-col md:flex-row">
 
-      {/* ================= SIDEBAR ================= */}
-      <aside className="h-screen w-64 fixed left-0 top-0 bg-primary-container border-r border-outline-variant hidden md:flex flex-col py-6 text-on-primary z-50">
-
-        <div className="px-6 mb-8">
-          <span className="text-xl font-bold font-headline">
-            LeadBridge
-          </span>
-
-          <span className="block text-sm text-on-primary-container mt-1">
-            Sales CRM
-          </span>
-        </div>
-
-        <nav className="flex-1 px-4 space-y-1">
-
-          <a
-            href="#"
-            className="flex items-center gap-3 px-4 py-3 bg-surface-container-highest text-on-surface border-l-4 border-primary rounded-r-lg"
-          >
-            <span className="material-symbols-outlined">
-              dashboard
-            </span>
-
-            Dashboard
-          </a>
-
-          <a
-            href="#"
-            className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-container-highest rounded-lg"
-          >
-            <span className="material-symbols-outlined">
-              group
-            </span>
-
-            Leads
-          </a>
-
-          <a
-            href="#"
-            className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-container-highest rounded-lg"
-          >
-            <span className="material-symbols-outlined">
-              event
-            </span>
-
-            Follow-ups
-          </a>
-
-          <a
-            href="#"
-            className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-container-highest rounded-lg"
-          >
-            <span className="material-symbols-outlined">
-              notifications
-            </span>
-
-            Notifications
-          </a>
-
-        </nav>
-      </aside>
+      <Sidebar active="/dashboard" />
 
       {/* ================= MAIN ================= */}
       <main className="flex-1 md:ml-64 p-6 md:p-8 max-w-[1280px] w-full mx-auto overflow-y-auto">
@@ -558,9 +500,9 @@ export default function Dashboard() {
                 Recent Leads
               </h3>
 
-              <button className="text-[14px] text-primary hover:underline">
+              <Link to="/leads" className="text-[14px] text-primary hover:underline">
                 View All
-              </button>
+              </Link>
 
             </div>
 

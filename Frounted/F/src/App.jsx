@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -18,6 +19,7 @@ import LogoutConfirmation from "./pages/LogoutConfirmation.jsx";
 const routes = {
       "/": Login,
       "/login": Login,
+      "/signup": Signup,
       "/forgot-password": ForgotPassword,
       "/reset-password": ResetPassword,
       "/dashboard": Dashboard,
@@ -37,6 +39,11 @@ const routes = {
 function AppContent() {
   const navigate = useNavigate();
   const [path, setPath] = useState(window.location.pathname);
+  const location = useLocation();
+
+  useEffect(() => {
+    setPath(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     const onPopState = () => setPath(window.location.pathname);
@@ -44,36 +51,9 @@ function AppContent() {
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const go = (to) => {
-    if (!to) return;
-    navigate(to);
-    setPath(to);
-  };
-
-  // Make the static Stitch navigation links functional without altering the generated UI.
-  const handleClick = (event) => {
-    const anchor = event.target.closest("a");
-    if (!anchor) return;
-    const text = anchor.textContent.trim().toLowerCase();
-    const map = {
-      "dashboard": "/dashboard",
-      "leads": "/leads",
-      "follow-ups": "/followups",
-      "notifications": "/notifications",
-      "activity logs": "/activity-logs",
-      "settings": "/settings",
-      "back to leads": "/leads",
-      "forgot password?": "/forgot-password",
-    };
-    if (map[text]) {
-      event.preventDefault();
-      go(map[text]);
-    }
-  };
-
   const Page = routes[path] || routes["/dashboard"];
   return (
-    <div onClick={handleClick}>
+    <div>
       <Page />
     </div>
   );

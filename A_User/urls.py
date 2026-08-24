@@ -6,10 +6,10 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import MeAPIView,UserCreateAPIView
-from . import views
+from .serializers import CustomTokenObtainPairSerializer
 
 urlpatterns=[
-    path("login/",TokenObtainPairView.as_view(),name="login"),
+    path("login/",TokenObtainPairView.as_view(serializer_class=CustomTokenObtainPairSerializer),name="login"),
     path("refresh/",TokenRefreshView.as_view(),name="refresh"),
     path("me/",MeAPIView.as_view(),name="me"),
     path("user/",UserCreateAPIView.as_view(),name="user-create"),

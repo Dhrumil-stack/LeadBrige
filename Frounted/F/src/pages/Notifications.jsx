@@ -1,73 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function Notifications() {
   return (
     <>
 <div className="bg-background text-on-background font-body antialiased flex h-screen overflow-hidden">
-{/* SideNavBar */}
-<nav className="bg-primary-container dark:bg-tertiary-container h-screen w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-on-tertiary-container flex flex-col py-6 z-20">
-<div className="px-6 mb-8">
-<h1 className="text-headline-md font-headline font-bold text-on-primary dark:text-inverse-primary tracking-tight">LeadBridge</h1>
-<p className="text-body-sm text-on-primary-container mt-1">Sales CRM</p>
-</div>
-<div className="px-4 mb-6">
-<button className="w-full bg-on-primary text-primary-container font-label-md py-2 px-4 rounded-md flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
-<span className="material-symbols-outlined text-[20px]">add</span>
-                New Lead
-            </button>
-</div>
-<ul className="flex flex-col gap-1 flex-1 px-2 font-body text-body-sm tracking-tight font-medium">
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">dashboard</span>
-                    Dashboard
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">leaderboard</span>
-                    Leads
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">reorder</span>
-                    Pipeline
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">group</span>
-                    Contacts
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">insights</span>
-                    Analytics
-                </a>
-</li>
-<li>
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md" href="#">
-<span className="material-symbols-outlined text-[20px]">settings</span>
-                    Settings
-                </a>
-</li>
-</ul>
-<div className="mt-auto px-2">
-<a className="flex items-center gap-3 px-4 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-on-primary-container/5 hover:text-on-primary transition-colors duration-150 rounded-md font-body text-body-sm font-medium" href="#">
-<span className="material-symbols-outlined text-[20px]">help</span>
-                Help Center
-            </a>
-<div className="px-4 py-3 mt-2 flex items-center gap-3">
-<img className="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small, professional headshot of a user with a neutral expression, well-lit studio lighting, corporate style, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_PVoXSOfjjHecblrkqmC_PUrqG9exuv9k8WFM93tVem2b9LPOekpZWsz9w5DjvuXGAiQJfeIGRhB-gRjI3shyxEaRc1HGH36Yy7T7EEahhtNgTORpyTIR2jFDSr9DaafPVMqJ5LdMvPviiENDZW79pVviBAzWstmEipcP7BB-VNydoaoM95JDWxze5nepLnVyzI6MZ5Lvs9_cnDTipRkBm4CciUF9Sjav8V5rn2moxbGSdg4mZGIYTg"/ >
-<div className="text-sm">
-<p className="text-on-primary font-medium">Alex Chen</p>
-<p className="text-on-primary-container text-xs">alex@leadbridge.com</p>
-</div>
-</div>
-</div>
-</nav>
+<Sidebar active="/notifications" />
 {/* Main Content Area */}
 <main className="flex-1 ml-64 flex flex-col h-full bg-background relative overflow-hidden">
 {/* TopNavBar */}

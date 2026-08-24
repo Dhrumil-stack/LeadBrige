@@ -1,6 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LogoutConfirmation() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    navigate("/login");
+  };
+
   return (
     <>
 <div className="bg-background text-on-background h-screen w-screen overflow-hidden flex relative">
@@ -58,10 +67,10 @@ export default function LogoutConfirmation() {
 </div>
 {/* Modal Footer / Actions */}
 <div className="px-6 py-4 bg-surface-bright flex items-center justify-end gap-3 rounded-b-xl border-t border-outline-variant/30 mt-2">
-<button className="px-4 py-2 text-label-md font-medium rounded text-on-surface-variant bg-transparent border border-outline-variant hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20" type="button">
+<button onClick={() => navigate(-1)} className="px-4 py-2 text-label-md font-medium rounded text-on-surface-variant bg-transparent border border-outline-variant hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20" type="button">
                     Cancel
                 </button>
-<button className="px-4 py-2 text-label-md font-medium rounded text-on-error bg-error hover:bg-error/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-error/20 flex items-center gap-2" type="button">
+<button onClick={handleLogout} className="px-4 py-2 text-label-md font-medium rounded text-on-error bg-error hover:bg-error/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-error/20 flex items-center gap-2" type="button">
                     Log Out
                 </button>
 </div>

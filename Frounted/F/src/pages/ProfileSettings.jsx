@@ -1,73 +1,11 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
 
 export default function ProfileSettings() {
   return (
     <>
 <div className="bg-surface text-on-surface antialiased min-h-screen flex">
-{/* SideNavBar */}
-<nav className="bg-primary-container dark:bg-primary-container h-full w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col py-6 z-50">
-<div className="px-6 mb-8 flex items-center justify-between">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center text-primary-container font-bold text-lg">L</div>
-<div>
-<h1 className="text-headline-sm font-bold text-on-primary tracking-tight">LeadBridge</h1>
-<p className="text-label-sm font-medium text-on-primary-container">Sales CRM</p>
-</div>
-</div>
-</div>
-<div className="px-4 mb-6">
-<button className="w-full bg-primary-fixed hover:bg-primary-fixed-dim text-on-primary-fixed font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors duration-150 shadow-sm scale-95 hover:scale-100 transform">
-<span className="material-symbols-outlined text-lg" data-icon="add"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>add</span>
-                Add New Lead
-            </button>
-</div>
-<ul className="flex-1 space-y-1">
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span className="text-label-sm font-medium">Dashboard</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="person_search">person_search</span>
-<span className="text-label-sm font-medium">Leads</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
-<span className="text-label-sm font-medium">Follow-ups</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span className="text-label-sm font-medium">Notifications</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 text-on-primary-container hover:text-on-primary hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="history">history</span>
-<span className="text-label-sm font-medium">Activity Logs</span>
-</a>
-</li>
-<li className="">
-<a className="flex items-center gap-3 px-4 py-2 border-l-4 border-primary bg-on-primary-container/10 text-on-primary font-semibold hover:bg-primary/20 transition-colors duration-150 scale-95 transition-transform duration-100" href="#">
-<span className="material-symbols-outlined" data-icon="settings"style={{fontVariationSettings: '"FILL" 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'}}>settings</span>
-<span className="text-label-sm font-medium">Settings</span>
-</a>
-</li>
-</ul>
-<div className="px-6 mt-auto">
-<div className="flex items-center gap-3 py-3 border-t border-outline-variant/30">
-<img alt="User Profile Avatar" className="w-8 h-8 rounded-full object-cover" data-alt="Professional headshot of a sales agent with a neutral expression, wearing smart business casual attire, against a light grey studio background. Clean, high quality corporate portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD6QTWCosOEyDspibGzfhL47TrlMfc6F09u2Y7bNdg7DLgzMBY7_810375QOW03FcEWKARrFHg01X76oQtrzX-v1DdnoduNiZq1-DwC8Gh1E2WEYHlef75pi-hWDA02yjP3XXTOcWb7avoE5oQMnzCDhKf0YdhvcWVDwfxhuzUvH60peP5GstZktKNXRr235EUpli2oIQFisIMry7GJ98QSM2CWH4LM-74oOMR9RrT73KgwG9IdOHEIQ" />
-<div className="flex-1 min-w-0">
-<p className="text-label-sm text-on-primary font-medium truncate">John Smith</p>
-</div>
-</div>
-</div>
-</nav>
+<Sidebar active="/settings" />
 {/* Main Content Area */}
 <div className="flex-1 ml-64 flex flex-col min-h-screen">
 {/* TopNavBar */}
@@ -104,19 +42,19 @@ export default function ProfileSettings() {
 {/* Settings Navigation (Left Sidebar) */}
 <aside className="w-full md:w-64 flex-shrink-0">
 <nav className="flex flex-col space-y-1">
-<a className="px-4 py-3 bg-surface-container text-primary font-semibold rounded-lg flex items-center justify-between group" href="#">
+<a className="px-4 py-3 bg-surface-container text-primary font-semibold rounded-lg flex items-center justify-between group" href="/settings">
 <span className="">Profile</span>
 <span className="material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
 </a>
-<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="#">
+<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="/settings/security">
 <span className="">Security</span>
 <span className="material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
 </a>
-<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="#">
+<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="/notifications">
 <span className="">Notifications</span>
 <span className="material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
 </a>
-<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="#">
+<a className="px-4 py-3 text-on-surface-variant hover:bg-surface hover:text-on-surface font-medium rounded-lg flex items-center justify-between transition-colors group" href="/settings/notifications">
 <span className="">Preferences</span>
 <span className="material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
 </a>

@@ -1,17 +1,15 @@
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
 
 class CoustomUserCreateSerilizer(UserCreateSerializer):
 
     def validate(self,attrs):
-        if attrs['role']=='Agent':
-            if not attrs('email').endswith("@asus.com"):
-                raise serializers.ValidationError("Email should end with companys email id.")
         return attrs
 
     def validate_email(self,value):
-        if User.objects.filter(email=value):
+        if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email Already exists.")
         return value
 
@@ -19,6 +17,16 @@ class CoustomUserCreateSerilizer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         fields=['id','first_name','last_name','email','phone','role','password']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove re_password field added by djoser's UserCreateSerializer
+        self.fields.pop('re_password', None)
+
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Use email as the login field instead of username."""
+    username_field = 'email'
 
 
 class CoustomUser(UserCreateSerializer):

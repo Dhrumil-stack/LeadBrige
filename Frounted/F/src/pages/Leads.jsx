@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getLeads } from "../api/leads.api";
+import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
   const [leads, setLeads] = useState([]);
@@ -54,125 +55,7 @@ export default function Leads() {
   return (
     <div className="bg-background text-on-background font-body min-h-screen flex antialiased">
 
-      {/* ================= SIDEBAR ================= */}
-
-      <nav className="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-primary-container flex flex-col py-6">
-
-        <div className="px-6 mb-8 flex items-center gap-3">
-
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
-            <span className="material-symbols-outlined">
-              add
-            </span>
-          </div>
-
-          <div>
-            <h1 className="text-headline-md font-bold text-on-primary">
-              LeadBridge
-            </h1>
-
-            <p className="font-body text-body-sm text-on-primary-container">
-              Sales CRM
-            </p>
-          </div>
-
-        </div>
-
-        <div className="px-4 mb-6">
-
-          <button className="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label text-label-md flex justify-center items-center gap-2 hover:bg-surface-tint transition-colors">
-            <span className="material-symbols-outlined text-sm">
-              add
-            </span>
-
-            New Lead
-          </button>
-
-        </div>
-
-        <ul className="flex flex-col gap-1 flex-1 overflow-y-auto px-2">
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-variant/20 transition-colors rounded-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                dashboard
-              </span>
-
-              Dashboard
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 bg-surface-container-highest text-on-surface border-l-4 border-primary rounded-r-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                group
-              </span>
-
-              Leads
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-variant/20 transition-colors rounded-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                event_repeat
-              </span>
-
-              Follow-ups
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-variant/20 transition-colors rounded-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                notifications
-              </span>
-
-              Notifications
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-variant/20 transition-colors rounded-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                history
-              </span>
-
-              Activity Logs
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="flex items-center gap-3 px-4 py-3 text-on-primary-container hover:bg-surface-variant/20 transition-colors rounded-lg font-label text-label-md"
-              href="#"
-            >
-              <span className="material-symbols-outlined">
-                settings
-              </span>
-
-              Settings
-            </a>
-          </li>
-
-        </ul>
-
-      </nav>
+      <Sidebar active="/leads" />
 
       {/* ================= MAIN ================= */}
 

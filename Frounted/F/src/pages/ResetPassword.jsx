@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ResetPassword() {
   return (
@@ -81,7 +82,7 @@ export default function ResetPassword() {
 </button>
 </div>
 <div className="text-center mt-4">
-<a className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Return to login</a>
+<Link className="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" to="/login">Return to login</Link>
 </div>
 </form>
 </div>
