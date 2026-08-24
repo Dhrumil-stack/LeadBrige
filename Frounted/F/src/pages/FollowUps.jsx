@@ -18,7 +18,7 @@ export default function FollowUps() {
 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 <span className="material-symbols-outlined text-outline" data-icon="search">search</span>
 </div>
-<input className="block w-full pl-10 pr-3 py-2 border border-outline-variant rounded-md leading-5 bg-surface-container-lowest placeholder-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-colors duration-200" placeholder="Search..." type="text"/ >
+<input className="block w-full pl-10 pr-3 py-2 border border-outline-variant rounded-md leading-5 bg-surface-container-lowest placeholder-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-colors duration-200" placeholder="Search..." type="text" />
 </div>
 </div>
 <div className="flex items-center justify-center md:hidden">
@@ -126,7 +126,7 @@ export default function FollowUps() {
 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 <span className="material-symbols-outlined text-outline text-[18px]" data-icon="search">search</span>
 </div>
-<input className="block w-full pl-9 pr-3 py-1.5 border border-outline-variant rounded-md text-body-sm bg-surface-container-lowest placeholder-on-surface-variant focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Search follow-ups or leads..." type="text"/ >
+<input className="block w-full pl-9 pr-3 py-1.5 border border-outline-variant rounded-md text-body-sm bg-surface-container-lowest placeholder-on-surface-variant focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Search follow-ups or leads..." type="text" />
 </div>
 <select className="border border-outline-variant rounded-md text-body-sm py-1.5 pl-3 pr-8 bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:border-primary text-on-surface-variant">
 <option>Status</option>

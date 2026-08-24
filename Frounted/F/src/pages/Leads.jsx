@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getLeads } from "../api/leads.api";
+import { getLeads, createLead } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
@@ -14,6 +14,69 @@ export default function Leads() {
   const [previous, setPrevious] = useState(null);
 
   const [page, setPage] = useState(1);
+
+  // Add Lead Modal
+  const [showModal, setShowModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    company_name: "",
+    source: "WHATSAPP",
+    service_interest: "SEO",
+    deal_value: "",
+  });
+
+  const handleFormChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleCreateLead = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setFormError("");
+
+    try {
+      await createLead({
+        name: form.name,
+        phone: form.phone,
+        email: form.email || undefined,
+        company_name: form.company_name || undefined,
+        source: form.source,
+        service_interest: form.service_interest,
+        deal_value: form.deal_value || 0,
+      });
+
+      setShowModal(false);
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        company_name: "",
+        source: "WHATSAPP",
+        service_interest: "SEO",
+        deal_value: "",
+      });
+      loadLeads();
+    } catch (error) {
+      console.error("Create lead error:", error);
+      const data = error.response?.data;
+      if (data) {
+        const errors = data.errors || data;
+        const firstKey = Object.keys(errors).find(k => k !== "success" && k !== "status_code");
+        const msg = firstKey
+          ? (Array.isArray(errors[firstKey]) ? errors[firstKey][0] : errors[firstKey])
+          : data.detail || "Failed to create lead.";
+        setFormError(msg);
+      } else {
+        setFormError("Failed to create lead.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const loadLeads = async () => {
     try {
@@ -158,7 +221,7 @@ export default function Leads() {
 
                 </button>
 
-                <button className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label text-label-md hover:bg-surface-tint transition-colors h-10">
+                <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label text-label-md hover:bg-surface-tint transition-colors h-10">
 
                   <span className="material-symbols-outlined text-sm">
                     add
@@ -218,7 +281,7 @@ export default function Leads() {
       </td>
     </tr>
 
-  ) : recentLeads.length === 0 ? (
+  ) : leads.length === 0 ? (
 
     <tr>
       <td
@@ -231,7 +294,7 @@ export default function Leads() {
 
   ) : (
 
-    recentLeads.slice(0, 5).map((lead) => (
+    leads.map((lead) => (
 
       <tr
         key={lead.id}
@@ -243,9 +306,10 @@ export default function Leads() {
           <div className="flex items-center gap-3">
 
             <div className="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">
-              {lead.name
-                ?.split(" ")
+              {(lead.name || "?")
+                .split(" ")
                 .map((word) => word[0])
+                .filter(Boolean)
                 .join("")
                 .slice(0, 2)
                 .toUpperCase()}
@@ -378,6 +442,161 @@ export default function Leads() {
         </main>
 
       </div>
+
+      {/* ================= ADD LEAD MODAL ================= */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowModal(false)}
+          />
+
+          {/* Modal */}
+          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-outline-variant">
+              <h3 className="text-xl font-semibold text-on-surface">
+                Add New Lead
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-high"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleCreateLead} className="p-6 space-y-5">
+              {formError && (
+                <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                  {formError}
+                </div>
+              )}
+
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Name *</label>
+                <input
+                  name="name"
+                  required
+                  value={form.name}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  placeholder="e.g. Rahul Sharma"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Phone *</label>
+                <input
+                  name="phone"
+                  required
+                  value={form.phone}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  placeholder="10-digit phone number"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  placeholder="e.g. rahul@example.com"
+                />
+              </div>
+
+              {/* Company */}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Company</label>
+                <input
+                  name="company_name"
+                  value={form.company_name}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  placeholder="e.g. Acme Corp"
+                />
+              </div>
+
+              {/* Source + Service Interest */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-on-surface mb-1">Source *</label>
+                  <select
+                    name="source"
+                    value={form.source}
+                    onChange={handleFormChange}
+                    className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  >
+                    <option value="WHATSAPP">WhatsApp</option>
+                    <option value="INSTAGRAM">Instagram</option>
+                    <option value="FACEBOOK">Facebook</option>
+                    <option value="WEBSITE">Website</option>
+                    <option value="REFERRAL">Referral</option>
+                    <option value="COLD_CALL">Cold Call</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-on-surface mb-1">Service *</label>
+                  <select
+                    name="service_interest"
+                    value={form.service_interest}
+                    onChange={handleFormChange}
+                    className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  >
+                    <option value="SEO">SEO</option>
+                    <option value="GOOGLE_ADS">Google Ads</option>
+                    <option value="META_ADS">Meta Ads</option>
+                    <option value="SOCIAL_MEDIA">Social Media</option>
+                    <option value="WEB_DEVELOPMENT">Web Development</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Deal Value */}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Deal Value</label>
+                <input
+                  name="deal_value"
+                  type="number"
+                  min="0"
+                  value={form.deal_value}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  placeholder="0"
+                />
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-low transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 bg-primary text-on-primary rounded-md hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50"
+                >
+                  {submitting ? "Creating..." : "Create Lead"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );
