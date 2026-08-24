@@ -71,13 +71,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://leadbridge-production-36b2.up.railway.app",
+    "https://lead-brige.vercel.app",
 ]
 
 #CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://leadbridge-production-36b2.up.railway.app",
+    "https://lead-brige.vercel.app",
+    "https://leadbrige-production-36b2.up.railway.app",
 ]
+
 ROOT_URLCONF = 'LeadBrige.urls'
 
 TEMPLATES = [

@@ -21,4 +21,3 @@ class LeadNote(TimeStampedModel):
     class Meta:
         db_table = "lead_notes"
         ordering = ["-created_at"]
-        
