@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)8ap@le$y1(yyd2*%q+kf&-kz3)!n#t8&vua3c*iaf%ia@h4*o
 DEBUG = True
 
 import os
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'rest_framework',
     'django_filters',
     'drf_spectacular',
@@ -58,19 +57,26 @@ AUTH_USER_MODEL='A_User.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
 ]
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://leadbridge-production-36b2.up.railway.app",
+]
+
+#CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://leadbridge-production-36b2.up.railway.app",
 ]
 ROOT_URLCONF = 'LeadBrige.urls'
 
@@ -146,29 +152,32 @@ SIMPLE_JWT = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 REST_FRAMEWORK={
     'COERCE_DECIMAL_TO_STRING':False,
-    #'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.LimitOffsetPagination',
-
-    'PAGE_SIZE':10,
-    
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.CustomPagination',
+    'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    "DEFAULT_PAGINATION_CLASS": "common.pagination.CustomPagination",
-
-    "PAGE_SIZE": 10,
-
-     "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend",
-        "rest_framework.filters.SearchFilter",
-        "rest_framework.filters.OrderingFilter",
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
     ],
-
-     "EXCEPTION_HANDLER": "common.exception.custom_exception_handler",
-     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SPECTACULAR_SETTINGS = {
@@ -194,7 +203,8 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 DJOSER={
+    'LOGIN_FIELD': 'email',
     'SERIALIZERS':{
-        'user_create':'A_User.serilizer.CoustomUserCreateSerilizer'
+        'user_create':'A_User.serializers.CoustomUserCreateSerilizer'
     }
 }
