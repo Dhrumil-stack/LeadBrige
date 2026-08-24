@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "https://leadbridge-production-36b2.up.railway.app",
+    baseURL: import.meta.env.VITE_API_URL || "https://leadbrige-production-36b2.up.railway.app",
 });
 
 api.interceptors.request.use(
