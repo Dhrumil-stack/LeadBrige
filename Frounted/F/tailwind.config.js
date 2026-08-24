@@ -9,6 +9,31 @@ export default {
 
   theme: {
     extend: {
+      spacing: {
+        'md': '1rem',
+        'lg': '1.5rem',
+        'xl': '2rem',
+        '2xl': '3rem',
+        '3xl': '4rem',
+      },
+
+      fontSize: {
+        'label-sm': ['0.75rem', { lineHeight: '1rem' }],
+        'label-md': ['0.875rem', { lineHeight: '1.25rem' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'body-md': ['1rem', { lineHeight: '1.5rem' }],
+        'headline-sm': ['1.125rem', { lineHeight: '1.75rem' }],
+        'headline-md': ['1.25rem', { lineHeight: '1.75rem' }],
+        'headline-lg': ['1.5rem', { lineHeight: '2rem' }],
+        'headline-xl': ['2rem', { lineHeight: '2.5rem' }],
+      },
+
+      fontFamily: {
+        headline: ["Inter", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+        label: ["Inter", "sans-serif"],
+      },
+
       colors: {
         background: "#f9f9ff",
         "surface-bright": "#f9f9ff",
@@ -64,12 +89,6 @@ export default {
         lg: "0.5rem",
         xl: "0.75rem",
         full: "9999px",
-      },
-
-      fontFamily: {
-        headline: ["Inter", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-        label: ["Inter", "sans-serif"],
       },
     },
   },
