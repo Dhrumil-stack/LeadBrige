@@ -552,7 +552,7 @@ export default function Dashboard() {
     </tr>
   )}
 
-  {!loading && !error && recentLeads.slice(0, 5) && (
+  {!loading && !error && recentLeads.length === 0 && (
     <tr>
       <td colSpan="7" className="py-10 text-center text-on-surface-variant">
         No leads found.
@@ -572,9 +572,10 @@ export default function Dashboard() {
           <div className="flex items-center gap-3">
 
             <div className="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-label-md">
-              {lead.name
-                ?.split(" ")
+              {(lead.name || "?")
+                .split(" ")
                 .map((word) => word[0])
+                .filter(Boolean)
                 .join("")
                 .slice(0, 2)
                 .toUpperCase()}

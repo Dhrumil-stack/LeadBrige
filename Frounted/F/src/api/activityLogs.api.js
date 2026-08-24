@@ -1,4 +1,4 @@
 import api from "./axios";
 
-export const getActivityLogs = (params) => api.get("/activity-logs/", { params });
-export const getActivityLog = (id) => api.get(`/activity-logs/${id}/`);
+export const getActivityLogs = (params) => api.get("/F/ActivityLogs/", { params });
+export const getActivityLog = (id) => api.get(`/F/ActivityLogs/${id}/`);
