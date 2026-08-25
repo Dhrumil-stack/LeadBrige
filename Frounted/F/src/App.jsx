@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -16,53 +16,29 @@ import SecuritySettings from "./pages/SecuritySettings.jsx";
 import NotificationPreferences from "./pages/NotificationPreferences.jsx";
 import LogoutConfirmation from "./pages/LogoutConfirmation.jsx";
 
-const routes = {
-      "/": Login,
-      "/login": Login,
-      "/signup": Signup,
-      "/forgot-password": ForgotPassword,
-      "/reset-password": ResetPassword,
-      "/dashboard": Dashboard,
-      "/dashboard/notifications": DashboardNotifications,
-      "/leads": Leads,
-      "/leads/1": LeadDetails,
-      "/followups": FollowUps,
-      "/notifications": Notifications,
-      "/activity-logs": ActivityLogs,
-      "/settings": ProfileSettings,
-      "/settings/profile": ProfileSettings,
-      "/settings/security": SecuritySettings,
-      "/settings/notifications": NotificationPreferences,
-      "/logout": LogoutConfirmation,
-};
-
-function AppContent() {
-  const navigate = useNavigate();
-  const [path, setPath] = useState(window.location.pathname);
-  const location = useLocation();
-
-  useEffect(() => {
-    setPath(location.pathname);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const onPopState = () => setPath(window.location.pathname);
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, []);
-
-  const Page = routes[path] || routes["/dashboard"];
-  return (
-    <div>
-      <Page />
-    </div>
-  );
-}
-
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/notifications" element={<DashboardNotifications />} />
+        <Route path="/leads" element={<Leads />} />
+        <Route path="/leads/:id" element={<LeadDetails />} />
+        <Route path="/followups" element={<FollowUps />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/activity-logs" element={<ActivityLogs />} />
+        <Route path="/settings" element={<ProfileSettings />} />
+        <Route path="/settings/profile" element={<ProfileSettings />} />
+        <Route path="/settings/security" element={<SecuritySettings />} />
+        <Route path="/settings/notifications" element={<NotificationPreferences />} />
+        <Route path="/logout" element={<LogoutConfirmation />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }
