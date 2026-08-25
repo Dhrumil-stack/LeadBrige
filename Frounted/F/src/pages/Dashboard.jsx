@@ -26,44 +26,32 @@ export default function Dashboard() {
       setLoading(true);
       setError("");
 
-      // ================= STATS =================
-      const statsData = await getDashboardStats();
+      // Run all API calls in parallel for speed
+      const [statsData, funnelData, sourcesData, recentLeadsData, followUpsData] =
+        await Promise.allSettled([
+          getDashboardStats(),
+          getDashboardFunnel(),
+          getDashboardSources(),
+          getRecentLeads(),
+          getUpcomingFollowUps(),
+        ]);
 
-      console.log("STATS:", statsData);
+      // Set data from successful calls (ignore individual failures)
+      if (statsData.status === "fulfilled") setStats(statsData.value);
+      if (funnelData.status === "fulfilled") setFunnel(funnelData.value);
+      if (sourcesData.status === "fulfilled") setSources(sourcesData.value);
+      if (recentLeadsData.status === "fulfilled") setRecentLeads(recentLeadsData.value);
+      if (followUpsData.status === "fulfilled") setUpcomingFollowUps(followUpsData.value);
 
-      setStats(statsData);
-
-      // ================= FUNNEL =================
-      const funnelData = await getDashboardFunnel();
-
-      console.log("FUNNEL:", funnelData);
-
-      setFunnel(funnelData);
-
-      // ================= SOURCES =================
-      const sourcesData = await getDashboardSources();
-
-      console.log("SOURCES:", sourcesData);
-
-      setSources(sourcesData);
-
-      // ================= RECENT LEADS =================
-      const recentLeadsData = await getRecentLeads();
-
-      console.log("RECENT LEADS:", recentLeadsData);
-
-      setRecentLeads(recentLeadsData);
-
-      // ================= FOLLOW UPS =================
-      const followUpsData = await getUpcomingFollowUps();
-
-      console.log("UPCOMING FOLLOWUPS:", followUpsData);
-
-      setUpcomingFollowUps(followUpsData);
+      // Show error only if ALL calls failed
+      const allFailed = [statsData, funnelData, sourcesData, recentLeadsData, followUpsData]
+        .every(r => r.status === "rejected");
+      if (allFailed) {
+        setError("Failed to load dashboard. Please try again.");
+      }
 
     } catch (error) {
       console.error("Dashboard API Error:", error);
-
       setError(
         error.response?.data?.detail ||
         "Failed to load dashboard"
