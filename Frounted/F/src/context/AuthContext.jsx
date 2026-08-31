@@ -12,11 +12,11 @@ export function AuthProvider({ children }) {
 
     try {
       // 1. Login
-      const data = await loginApi(email, password);
+      const data = await loginApi({ email, password });
 
       // 2. Save JWT tokens
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
+      localStorage.setItem("access", data.access);
+      localStorage.setItem("refresh", data.refresh);
 
       // 3. Get logged-in user
       const userData = await getMe();
@@ -44,8 +44,8 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
     setUser(null);
   };
 
