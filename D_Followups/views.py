@@ -91,13 +91,9 @@ class FollowUps(ModelViewSet):
         user = self.request.user
 
         if user.role == "AGENT":
-
-            followup = serializer.save(
-                assigned_to=user
-            )
-
+            followup = serializer.save(assigned_to=user)
         else:
-
+            # Admin must provide assigned_to via request data
             followup = serializer.save()
 
         ActivityLog.objects.create(

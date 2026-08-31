@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getLeads, createLead, assignLead, getAgents } from "../api/leads.api";
+import { useNavigate } from "react-router-dom";
+import { getLeads, createLead } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
+  const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -14,14 +16,6 @@ export default function Leads() {
   const [previous, setPrevious] = useState(null);
 
   const [page, setPage] = useState(1);
-
-  // Assign Lead Modal
-  const [showAssignModal, setShowAssignModal] = useState(false);
-  const [assignLeadData, setAssignLeadData] = useState(null);
-  const [agents, setAgents] = useState([]);
-  const [selectedAgent, setSelectedAgent] = useState("");
-  const [assignLoading, setAssignLoading] = useState(false);
-  const [assignError, setAssignError] = useState("");
 
   // Add Lead Modal
   const [showModal, setShowModal] = useState(false);
@@ -120,51 +114,6 @@ export default function Leads() {
     loadLeads();
   }, [page, search]);
 
-  const loadAgents = async () => {
-    try {
-      const data = await getAgents();
-      setAgents(data);
-    } catch (err) {
-      console.error("Failed to load agents:", err);
-    }
-  };
-
-  useEffect(() => {
-    loadAgents();
-  }, []);
-
-  const openAssignModal = (lead) => {
-    setAssignLeadData(lead);
-    setSelectedAgent(lead.assigned_to || "");
-    setAssignError("");
-    setShowAssignModal(true);
-  };
-
-  const handleAssign = async () => {
-    if (!selectedAgent) {
-      setAssignError("Please select an agent.");
-      return;
-    }
-    setAssignLoading(true);
-    setAssignError("");
-    try {
-      await assignLead(assignLeadData.id, selectedAgent);
-      setShowAssignModal(false);
-      setAssignLeadData(null);
-      setSelectedAgent("");
-      loadLeads();
-    } catch (err) {
-      console.error("Assign error:", err);
-      const data = err.response?.data;
-      setAssignError(data?.detail || data?.agent_id?.[0] || "Failed to assign lead.");
-    } finally {
-      setAssignLoading(false);
-    }
-  };
-
-
-  const totalPages = Math.ceil(count / 10);
-
   return (
     <div className="bg-background text-on-background font-body min-h-screen flex antialiased">
 
@@ -251,26 +200,6 @@ export default function Leads() {
 
               <div className="flex gap-3 w-full sm:w-auto">
 
-                <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded font-label text-label-md hover:bg-surface-container-low transition-colors h-10">
-
-                  <span className="material-symbols-outlined text-sm">
-                    filter_list
-                  </span>
-
-                  Filter
-
-                </button>
-
-                <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface rounded font-label text-label-md hover:bg-surface-container-low transition-colors h-10">
-
-                  <span className="material-symbols-outlined text-sm">
-                    sort
-                  </span>
-
-                  Sort
-
-                </button>
-
                 <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label text-label-md hover:bg-surface-tint transition-colors h-10">
 
                   <span className="material-symbols-outlined text-sm">
@@ -285,252 +214,129 @@ export default function Leads() {
 
             </div>
 
-      {/* TABLE */}
+            {/* TABLE */}
 
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+            <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
 
         <div className="overflow-x-auto">
 
           <table className="w-full text-left border-collapse">
 
-            <thead>
-              <tr className="bg-surface-container-low border-b border-outline-variant">
+            <thead>                    <tr className="bg-surface-container-low border-b border-outline-variant">
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  LEAD NAME
-                </th>
+                      <th className="py-3 px-6 text-left text-xs font-semibold">
+                        LEAD NAME
+                      </th>
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  SOURCE
-                </th>
+                      <th className="py-3 px-6 text-left text-xs font-semibold">
+                        SOURCE
+                      </th>
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  STATUS
-                </th>
+                      <th className="py-3 px-6 text-left text-xs font-semibold">
+                        STATUS
+                      </th>
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  AGENT
-                </th>
+                      <th className="py-3 px-6 text-left text-xs font-semibold">
+                        AGENT
+                      </th>
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  CREATED
-                </th>
+                      <th className="py-3 px-6 text-left text-xs font-semibold">
+                        CREATED
+                      </th>
 
-                <th className="py-3 px-6 text-left text-xs font-semibold">
-                  ACTION
-                </th>
-
-              </tr>
+                    </tr>
             </thead>
 
                   <tbody className="font-body text-body-sm text-on-surface divide-y divide-outline-variant">
 
-  {loading ? (
-    <tr>
-      <td
-        colSpan={6}
-        className="py-10 text-center text-on-surface-variant"
-      >
-        Loading leads...
-      </td>
-    </tr>
+                    {loading ? (
+                      <tr>
+                        <td colSpan={5} className="py-10 text-center text-on-surface-variant">
+                          Loading leads...
+                        </td>
+                      </tr>
+                    ) : leads.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-10 text-center text-on-surface-variant">
+                          No leads found.
+                        </td>
+                      </tr>
+                    ) : (
+                      leads.map((lead) => (
+                        <tr
+                          key={lead.id}
+                          onClick={() => navigate(`/leads/${lead.id}`)}
+                          className="hover:bg-surface-container-low/50 transition-colors cursor-pointer"
+                        >
+                          {/* LEAD NAME */}
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">
+                                {(lead.name || "?")
+                                  .split(" ")
+                                  .map((word) => word[0])
+                                  .filter(Boolean)
+                                  .join("")
+                                  .slice(0, 2)
+                                  .toUpperCase()}
+                              </div>
+                              <div>
+                                <p className="font-semibold">
+                                  {lead.name || "-"}
+                                </p>
+                                {lead.company_name && (
+                                  <p className="text-xs text-on-surface-variant">
+                                    {lead.company_name}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </td>
 
-  ) : leads.length === 0 ? (
+                          {/* SOURCE */}
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              <span className="material-symbols-outlined text-sm">
+                                public
+                              </span>
+                              {lead.source || "-"}
+                            </div>
+                          </td>
 
-    <tr>
-      <td
-        colSpan={6}
-        className="py-10 text-center text-on-surface-variant"
-      >
-        No leads found.
-      </td>
-    </tr>
+                          {/* STATUS */}
+                          <td className="py-4 px-6">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container-highest">
+                              {lead.status || "-"}
+                            </span>
+                          </td>
 
-  ) : (
+                          {/* AGENT */}
+                          <td className="py-4 px-6">
+                            {lead.assigned_to_name || "-"}
+                          </td>
 
-    leads.map((lead) => (
+                          {/* CREATED */}
+                          <td className="py-4 px-6 text-on-surface-variant">
+                            {lead.created_at
+                              ? new Date(
+                                  lead.created_at
+                                ).toLocaleDateString("en-IN", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })
+                              : "-"}
+                          </td>
 
-      <tr
-        key={lead.id}
-        className="hover:bg-surface-container-low/50 transition-colors"
-      >
+                        </tr>
+                      ))
+                    )}
 
-        {/* LEAD NAME */}
-        <td className="py-4 px-6">
-          <div className="flex items-center gap-3">
-
-            <div className="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">
-              {(lead.name || "?")
-                .split(" ")
-                .map((word) => word[0])
-                .filter(Boolean)
-                .join("")
-                .slice(0, 2)
-                .toUpperCase()}
-            </div>
-
-            <div>
-              <p className="font-semibold">
-                {lead.name || "-"}
-              </p>
-
-              {lead.company_name && (
-                <p className="text-xs text-on-surface-variant">
-                  {lead.company_name}
-                </p>
-              )}
-            </div>
-
-          </div>
-        </td>
-
-        {/* SOURCE */}
-        <td className="py-4 px-6">
-          <div className="flex items-center gap-2">
-
-            <span className="material-symbols-outlined text-sm">
-              public
-            </span>
-
-            {lead.source || "-"}
-          </div>
-        </td>
-
-        {/* STATUS */}
-        <td className="py-4 px-6">
-
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container-highest">
-            {lead.status || "-"}
-          </span>
-
-        </td>
-
-        {/* AGENT */}
-        <td className="py-4 px-6">
-          {lead.assigned_to_name ||
-            lead.assigned_to ||
-            "-"}
-        </td>
-
-        {/* CREATED */}
-        <td className="py-4 px-6 text-on-surface-variant">
-
-          {lead.created_at
-            ? new Date(
-                lead.created_at
-              ).toLocaleDateString("en-IN", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
-            : "-"}
-
-        </td>
-
-        {/* ACTION */}
-        <td className="py-4 px-6">
-          <button
-            onClick={() => openAssignModal(lead)}
-            className="flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary rounded-md text-xs font-semibold hover:bg-primary/90 transition-colors"
-          >
-            <span className="material-symbols-outlined text-sm">
-              person_add
-            </span>
-            Assign
-          </button>
-        </td>
-
-      </tr>
-
-    ))
-
-  )}
-
-</tbody>
+                  </tbody>
 
                 </table>
 
               </div>
-
-      {/* ================= ASSIGN AGENT MODAL ================= */}
-      {showAssignModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowAssignModal(false)}
-          />
-
-          {/* Modal */}
-          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-md mx-4">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-outline-variant">
-              <h3 className="text-xl font-semibold text-on-surface">
-                Assign Lead to Agent
-              </h3>
-              <button
-                onClick={() => setShowAssignModal(false)}
-                className="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-high"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 space-y-5">
-              {assignError && (
-                <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
-                  {assignError}
-                </div>
-              )}
-
-              <div>
-                <p className="text-sm text-on-surface-variant mb-1">
-                  Lead: <span className="font-semibold text-on-surface">{assignLeadData?.name}</span>
-                </p>
-                {assignLeadData?.company_name && (
-                  <p className="text-sm text-on-surface-variant">
-                    Company: {assignLeadData.company_name}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-on-surface mb-1">Select Agent *</label>
-                <select
-                  value={selectedAgent}
-                  onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
-                >
-                  <option value="">-- Select Agent --</option>
-                  {agents.map((agent) => (
-                    <option key={agent.id} value={agent.id}>
-                      {agent.full_name || `${agent.first_name} ${agent.last_name}`} ({agent.email})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAssignModal(false)}
-                  className="px-4 py-2 border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-low transition-colors text-sm font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAssign}
-                  disabled={assignLoading}
-                  className="px-4 py-2 bg-primary text-on-primary rounded-md hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50"
-                >
-                  {assignLoading ? "Assigning..." : "Assign Lead"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
               {/* PAGINATION */}
 

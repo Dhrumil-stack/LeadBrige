@@ -1,20 +1,32 @@
 from rest_framework import serializers
 from .models import FollowUp
+from B_Leads.models import Lead
+from A_User.models import User
+
 
 class FollowUpSeriliuzer(serializers.ModelSerializer):
 
-      lead_name = serializers.CharField(source='lead.name', read_only=True)
-      Username=serializers.CharField(source="assigned_to.get_full_name")
+    lead_name = serializers.CharField(source='lead.name', read_only=True)
+    Username = serializers.CharField(source="assigned_to.get_full_name", read_only=True)
 
-      def validate_assigned_to(self,value):
-            if value.role!='AGENT':
-                  raise serializers.ValidationError("FolllowUp cannot assign to admin")
+    # assigned_to is set automatically by perform_create for agents,
+    # so make it not required in the serializer
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        required=False,
+        allow_null=True,
+    )
 
-            return value
-      
-      class Meta:
-                  model=FollowUp
-                  fields="__all__"
+    class Meta:
+        model = FollowUp
+        fields = "__all__"
+        read_only_fields = ["completed_at"]
+
+    def validate_lead(self, value):
+        return value
+
+    def validate(self, attrs):
+        return attrs
 
 # class FollowUpSeriliuzerUpdate(serializers.ModelSerializer):
       

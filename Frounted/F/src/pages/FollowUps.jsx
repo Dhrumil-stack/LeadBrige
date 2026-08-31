@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { getFollowUps } from "../api/followups.api";
+import { getFollowUps, createFollowUp } from "../api/followups.api";
+import { getLeads } from "../api/leads.api";
 
 export default function FollowUps() {
   const [followUps, setFollowUps] = useState([]);
@@ -8,6 +9,17 @@ export default function FollowUps() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+
+  // Add Follow-up Modal
+  const [showModal, setShowModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [leads, setLeads] = useState([]);
+  const [form, setForm] = useState({
+    lead: "",
+    due_date: "",
+    remarks: "",
+  });
 
   const loadFollowUps = async () => {
     try {
@@ -25,7 +37,53 @@ export default function FollowUps() {
 
   useEffect(() => {
     loadFollowUps();
+    loadLeads();
   }, []);
+
+  const loadLeads = async () => {
+    try {
+      const data = await getLeads({ limit: 100 });
+      setLeads(data.results || []);
+    } catch (err) {
+      console.error("Failed to load leads:", err);
+    }
+  };
+
+  const handleFormChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleCreateFollowUp = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setFormError("");
+
+    try {
+      await createFollowUp({
+        lead: form.lead,
+        due_date: form.due_date,
+        remarks: form.remarks,
+      });
+      setShowModal(false);
+      setForm({ lead: "", due_date: "", remarks: "" });
+      loadFollowUps();
+    } catch (err) {
+      console.error("Create followup error:", err);
+      const data = err.response?.data;
+      if (data) {
+        const errors = data.errors || data;
+        const firstKey = Object.keys(errors).find(k => k !== "success" && k !== "status_code");
+        const msg = firstKey
+          ? (Array.isArray(errors[firstKey]) ? errors[firstKey][0] : errors[firstKey])
+          : data.detail || "Failed to create follow-up.";
+        setFormError(msg);
+      } else {
+        setFormError("Failed to create follow-up.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const filtered = followUps.filter((f) => {
     const matchSearch = !search || f.remarks?.toLowerCase().includes(search.toLowerCase());
@@ -95,7 +153,10 @@ export default function FollowUps() {
                 <h2 className="text-headline-lg text-on-background mb-1">Follow-ups</h2>
                 <p className="text-body-md text-on-surface-variant">Stay on top of your customer conversations and scheduled tasks.</p>
               </div>
-              <button className="bg-primary text-on-primary hover:bg-primary/90 transition-colors rounded-md font-label text-label-md py-2.5 px-5 flex items-center justify-center gap-2 whitespace-nowrap shadow-sm">
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-primary text-on-primary hover:bg-primary/90 transition-colors rounded-md font-label text-label-md py-2.5 px-5 flex items-center justify-center gap-2 whitespace-nowrap shadow-sm"
+              >
                 <span className="material-symbols-outlined text-[20px]">add</span>
                 Add Follow-up
               </button>
@@ -249,5 +310,91 @@ export default function FollowUps() {
         </main>
       </div>
     </div>
+
+      {/* ================= ADD FOLLOW-UP MODAL ================= */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowModal(false)}
+          />
+          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-md mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-outline-variant">
+              <h3 className="text-xl font-semibold text-on-surface">
+                Add New Follow-up
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-high"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleCreateFollowUp} className="p-6 space-y-5">
+              {formError && (
+                <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                  {formError}
+                </div>
+              )}
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Lead *</label>
+                <select
+                  name="lead"
+                  required
+                  value={form.lead}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm h-10"
+                >
+                  <option value="">-- Select Lead --</option>
+                  {leads.map((lead) => (
+                    <option key={lead.id} value={lead.id}>
+                      {lead.name}{lead.company_name ? ` (${lead.company_name})` : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Due Date & Time *</label>
+                <input
+                  name="due_date"
+                  type="datetime-local"
+                  required
+                  value={form.due_date}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm h-10"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-on-surface mb-1">Remarks</label>
+                <textarea
+                  name="remarks"
+                  rows={3}
+                  value={form.remarks}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                  placeholder="Add any notes or remarks..."
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-low transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 bg-primary text-on-primary rounded-md hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50"
+                >
+                  {submitting ? "Creating..." : "Create Follow-up"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
   );
 }
