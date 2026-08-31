@@ -26,6 +26,8 @@ class FollowUps(ModelViewSet):
         elif user.role == "AGENT":
             return FollowUp.objects.filter(
                 assigned_to=user
+            ) | FollowUp.objects.filter(
+                lead__created_by=user
             )
 
         return FollowUp.objects.none()

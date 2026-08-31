@@ -181,6 +181,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import models
 
 from .models import Lead
 from .serializers import LeadSerializer
@@ -239,8 +240,8 @@ class LeadViewSet(ModelViewSet):
             return Lead.objects.all().order_by("-created_at")
 
         return Lead.objects.filter(
-            assigned_to=user
-        ).order_by("-created_at")
+            models.Q(assigned_to=user) | models.Q(created_by=user)
+        ).distinct().order_by("-created_at")
 
     def destroy(self, request, *args, **kwargs):
 
