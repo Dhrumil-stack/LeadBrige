@@ -182,9 +182,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
+from rest_framework.decorators import action
 
 from .models import Lead
-from .serializers import LeadSerializer
+from .serializers import LeadSerializer, LeadAssignSerializer
 from F_Activity_logs.models import ActivityLog
 from common.permission import IsAgentORIsAdmin
 from rest_framework.permissions import IsAuthenticated
@@ -289,4 +290,26 @@ class LeadViewSet(ModelViewSet):
                     f"from {old_status} to {new_status}"
                 )
             )
+
+    @action(detail=True, methods=["post"], url_path="assign")
+    def assign_lead(self, request, pk=None):
+        lead = self.get_object()
+        serializer = LeadAssignSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        agent = serializer.validated_data["agent_id"]
+        lead.assigned_to = agent
+        lead.save(update_fields=["assigned_to"])
+
+        ActivityLog.objects.create(
+            user=request.user,
+            lead=lead,
+            action="LEAD_ASSIGNED",
+            descption=f"Lead {lead.name} assigned to {agent.get_full_name()}"
+        )
+
+        return Response({
+            "detail": f"Lead {lead.name} assigned to {agent.get_full_name()} successfully.",
+            "lead": LeadSerializer(lead).data,
+        })
 

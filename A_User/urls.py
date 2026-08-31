@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 
-from .views import MeAPIView,UserCreateAPIView
+from .views import MeAPIView, UserCreateAPIView, AgentListView
 from .serializers import CustomTokenObtainPairSerializer
 
 urlpatterns=[
@@ -13,4 +13,5 @@ urlpatterns=[
     path("refresh/",TokenRefreshView.as_view(),name="refresh"),
     path("me/",MeAPIView.as_view(),name="me"),
     path("user/",UserCreateAPIView.as_view(),name="user-create"),
+    path("agents/",AgentListView.as_view(),name="agent-list"),
 ]
