@@ -20,8 +20,8 @@ export default function Login() {
           password: password,
       });
 
-      localStorage.setItem("access", response.data.access);
-      localStorage.setItem("refresh", response.data.refresh);
+      localStorage.setItem("access", response.access);
+      localStorage.setItem("refresh", response.refresh);
 
       navigate("/dashboard");
     } catch (error) {
