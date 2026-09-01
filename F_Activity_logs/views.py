@@ -30,6 +30,11 @@ class ActivityLogs(ReadOnlyModelViewSet):
 
     ordering = ["-created_at"]
 
+    filterset_fields = [
+        "action",
+        "user",
+    ]
+
     def get_queryset(self):
         from django.db import models
         user = self.request.user

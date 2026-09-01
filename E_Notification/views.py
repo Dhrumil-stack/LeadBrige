@@ -30,6 +30,10 @@ class Notificationtyy(ModelViewSet):
 
     ordering = ["-created_at"]
 
+    filterset_fields = [
+        "is_read",
+    ]
+
     def get_queryset(self):
         print("USER:", self.request.user)
         print("USER ID:", self.request.user.id)

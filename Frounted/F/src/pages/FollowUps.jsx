@@ -25,7 +25,10 @@ export default function FollowUps() {
     try {
       setLoading(true);
       setError("");
-      const data = await getFollowUps();
+      const params = {};
+      if (search) params.search = search;
+      if (statusFilter !== "all") params.status = statusFilter;
+      const data = await getFollowUps(params);
       setFollowUps(data.results || data || []);
     } catch (err) {
       console.error("FollowUps API Error:", err);
@@ -38,7 +41,7 @@ export default function FollowUps() {
   useEffect(() => {
     loadFollowUps();
     loadLeads();
-  }, []);
+  }, [search, statusFilter]);
 
   const loadLeads = async () => {
     try {

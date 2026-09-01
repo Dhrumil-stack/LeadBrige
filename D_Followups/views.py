@@ -40,6 +40,12 @@ class FollowUps(ModelViewSet):
     ]
 
     ordering = ["due_date"]
+
+    filterset_fields = [
+        "status",
+        "assigned_to",
+    ]
+
     def get_queryset(self):
 
         user = self.request.user

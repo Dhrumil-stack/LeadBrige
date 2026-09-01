@@ -223,6 +223,13 @@ class LeadViewSet(ModelViewSet):
         "-created_at"
     ]
 
+    filterset_fields = [
+        "status",
+        "source",
+        "service_interest",
+        "assigned_to",
+    ]
+
     def list(self, request, *args, **kwargs):
 
         print("========== LEAD API DEBUG ==========")

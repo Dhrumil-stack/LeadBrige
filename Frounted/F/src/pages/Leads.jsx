@@ -8,6 +8,9 @@ export default function Leads() {
   const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
+  const [ordering, setOrdering] = useState("-created_at");
 
   const [count, setCount] = useState(0);
   const [next, setNext] = useState(null);
@@ -149,11 +152,16 @@ export default function Leads() {
       setLoading(true);
       setError("");
 
-      const data = await getLeads({
+      const params = {
         limit: 10,
         offset: (page - 1) * 10,
-        search: search,
-      });
+      };
+      if (search) params.search = search;
+      if (statusFilter !== "all") params.status = statusFilter;
+      if (sourceFilter !== "all") params.source = sourceFilter;
+      if (ordering) params.ordering = ordering;
+
+      const data = await getLeads(params);
 
       console.log("LEADS API RESPONSE:", data);
 
@@ -177,7 +185,7 @@ export default function Leads() {
   useEffect(() => {
     loadLeads();
     loadAgents();
-  }, [page, search]);
+  }, [page, search, statusFilter, sourceFilter, ordering]);
 
   return (
     <div className="bg-background text-on-background font-body min-h-screen flex antialiased">
@@ -263,18 +271,53 @@ export default function Leads() {
 
               </div>
 
-              <div className="flex gap-3 w-full sm:w-auto">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+                <select
+                  value={statusFilter}
+                  onChange={(e) => { setPage(1); setStatusFilter(e.target.value); }}
+                  className="px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface text-sm h-10 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="all">All Status</option>
+                  <option value="NEW">New</option>
+                  <option value="CONTACTED">Contacted</option>
+                  <option value="INTERESTED">Interested</option>
+                  <option value="NEGOTIATION">Negotiation</option>
+                  <option value="WON">Won</option>
+                  <option value="LOST">Lost</option>
+                </select>
+
+                <select
+                  value={sourceFilter}
+                  onChange={(e) => { setPage(1); setSourceFilter(e.target.value); }}
+                  className="px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface text-sm h-10 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="all">All Source</option>
+                  <option value="WHATSAPP">WhatsApp</option>
+                  <option value="INSTAGRAM">Instagram</option>
+                  <option value="FACEBOOK">Facebook</option>
+                  <option value="WEBSITE">Website</option>
+                  <option value="REFERRAL">Referral</option>
+                  <option value="COLD_CALL">Cold Call</option>
+                </select>
+
+                <select
+                  value={ordering}
+                  onChange={(e) => { setPage(1); setOrdering(e.target.value); }}
+                  className="px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface text-sm h-10 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="-created_at">Newest First</option>
+                  <option value="created_at">Oldest First</option>
+                  <option value="name">Name A-Z</option>
+                  <option value="-name">Name Z-A</option>
+                  <option value="status">Status A-Z</option>
+                  <option value="-status">Status Z-A</option>
+                  <option value="-updated_at">Recently Updated</option>
+                </select>
 
                 <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label text-label-md hover:bg-surface-tint transition-colors h-10">
-
-                  <span className="material-symbols-outlined text-sm">
-                    add
-                  </span>
-
+                  <span className="material-symbols-outlined text-sm">add</span>
                   Add Lead
-
                 </button>
-
               </div>
 
             </div>

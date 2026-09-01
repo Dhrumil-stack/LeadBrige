@@ -15,12 +15,15 @@ export default function Notifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   const loadNotifications = async () => {
     try {
       setLoading(true);
       setError("");
-      const data = await getNotifications();
+      const params = {};
+      if (search) params.search = search;
+      const data = await getNotifications(params);
       setNotifications(data.results || data || []);
     } catch (err) {
       console.error("Notifications API Error:", err);
@@ -32,7 +35,7 @@ export default function Notifications() {
 
   useEffect(() => {
     loadNotifications();
-  }, []);
+  }, [search]);
 
   const handleMarkRead = async (id) => {
     try {
@@ -144,6 +147,20 @@ export default function Notifications() {
             {error && (
               <div className="p-4 rounded-lg bg-red-100 text-red-700 mb-6">{error}</div>
             )}
+
+            {/* Search */}
+            <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 mb-6 shadow-sm flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[200px]">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-md text-body-sm placeholder-on-surface-variant focus:ring-1 focus:ring-primary focus:border-primary"
+                  placeholder="Search notifications..."
+                  type="text"
+                />
+              </div>
+            </div>
 
             {/* Filter Tabs */}
             <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 mb-6 shadow-sm flex flex-wrap gap-2">

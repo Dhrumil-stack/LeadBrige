@@ -29,7 +29,10 @@ export default function ActivityLogs() {
     try {
       setLoading(true);
       setError("");
-      const data = await getActivityLogs();
+      const params = {};
+      if (search) params.search = search;
+      if (actionFilter !== "all") params.action = actionFilter;
+      const data = await getActivityLogs(params);
       setLogs(data.results || data || []);
     } catch (err) {
       console.error("Activity Logs API Error:", err);
@@ -41,7 +44,7 @@ export default function ActivityLogs() {
 
   useEffect(() => {
     loadLogs();
-  }, []);
+  }, [search, actionFilter]);
 
   const filtered = logs.filter((log) => {
     const matchSearch = !search || log.descption?.toLowerCase().includes(search.toLowerCase());
