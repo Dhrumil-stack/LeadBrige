@@ -22,6 +22,7 @@ export default function Leads() {
 
   // Delete Lead
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Assign Agent
@@ -126,6 +127,7 @@ export default function Leads() {
 
   const handleDeleteLead = async () => {
     setDeleteLoading(true);
+    setDeleteError("");
     try {
       await deleteLead(selectedLead.id);
       setShowDetailsModal(false);
@@ -134,6 +136,8 @@ export default function Leads() {
       loadLeads();
     } catch (err) {
       console.error("Delete lead error:", err);
+      const data = err.response?.data;
+      setDeleteError(data?.detail || "Failed to delete lead.");
     } finally {
       setDeleteLoading(false);
     }
@@ -562,7 +566,7 @@ export default function Leads() {
                   {/* Delete Lead */}
                   <div className="border-t border-outline-variant pt-4">
                     <button
-                      onClick={() => setShowDeleteConfirm(true)}
+                      onClick={() => { setDeleteError(""); setShowDeleteConfirm(true); }}
                       className="flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 rounded-md hover:bg-red-50 transition-colors text-sm font-medium"
                     >
                       <span className="material-symbols-outlined text-sm">delete</span>
@@ -624,6 +628,11 @@ export default function Leads() {
                 <span className="material-symbols-outlined text-red-600">warning</span>
               </div>
               <h3 className="text-lg font-semibold text-on-surface mb-2">Delete Lead</h3>
+              {deleteError && (
+                <div className="mb-3 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                  {deleteError}
+                </div>
+              )}
               <p className="text-sm text-on-surface-variant mb-6">
                 Are you sure you want to delete <strong>{selectedLead?.name}</strong>? This action cannot be undone.
               </p>

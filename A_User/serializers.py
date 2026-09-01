@@ -23,6 +23,7 @@ class CoustomUserCreateSerilizer(UserCreateSerializer):
         return value
 
     id=serializers.UUIDField(read_only=True)
+
     class Meta(UserCreateSerializer.Meta):
         fields=['id','first_name','last_name','email','phone','role','password']
 
@@ -36,7 +37,7 @@ class CoustomUserCreateSerilizer(UserCreateSerializer):
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Use email as the login field instead of username."""
     username_field = 'email'
-
+    
 
 class CoustomUser(UserCreateSerializer):
     

@@ -183,6 +183,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Lead
 from .serializers import LeadSerializer, LeadAssignSerializer
@@ -246,15 +247,8 @@ class LeadViewSet(ModelViewSet):
         ).distinct().order_by("-created_at")
 
     def destroy(self, request, *args, **kwargs):
-
         if request.user.role != "ADMIN":
-            return Response(
-                {
-                    "detail": "Only admins can delete leads."
-                },
-                status=403
-            )
-
+            raise PermissionDenied("Only admins can delete leads.")
         return super().destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
