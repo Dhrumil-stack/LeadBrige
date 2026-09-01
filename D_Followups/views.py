@@ -4,6 +4,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import FollowUp
 from .serilizer import FollowUpSeriliuzer
@@ -16,6 +18,28 @@ class FollowUps(ModelViewSet):
 
     permission_classes = [IsAgentORIsAdmin]
     serializer_class=FollowUpSeriliuzer
+
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    search_fields = [
+        "remarks",
+        "lead__name",
+        "lead__email",
+        "lead__phone",
+    ]
+
+    ordering_fields = [
+        "due_date",
+        "status",
+        "created_at",
+        "completed_at",
+    ]
+
+    ordering = ["due_date"]
     def get_queryset(self):
 
         user = self.request.user

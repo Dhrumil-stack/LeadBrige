@@ -208,6 +208,7 @@ class LeadViewSet(ModelViewSet):
         "name",
         "email",
         "phone",
+        "company_name",
     ]
 
     ordering_fields = [

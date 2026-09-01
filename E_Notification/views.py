@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Notification
 from .serilizer import NotiSerilizer,UpdateNotificationSerilizer
 from common.permission import IsAgentORIsAdmin
@@ -9,6 +11,24 @@ from common.permission import IsAgentORIsAdmin
 class Notificationtyy(ModelViewSet):
     permission_classes=[IsAgentORIsAdmin]
     #queryset=Notification.objects.all()
+
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    search_fields = [
+        "title",
+        "message",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "is_read",
+    ]
+
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         print("USER:", self.request.user)

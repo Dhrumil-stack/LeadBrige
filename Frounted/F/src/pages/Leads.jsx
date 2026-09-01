@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getLeads, getLead, createLead, assignLead, getAgents } from "../api/leads.api";
+import { getLeads, getLead, createLead, assignLead, deleteLead, getAgents } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
@@ -19,6 +19,10 @@ export default function Leads() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [detailsLoading, setDetailsLoading] = useState(false);
+
+  // Delete Lead
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Assign Agent
   const [agents, setAgents] = useState([]);
@@ -117,6 +121,21 @@ export default function Leads() {
       setAssignError(data?.detail || data?.agent_id?.[0] || "Failed to assign lead.");
     } finally {
       setAssignLoading(false);
+    }
+  };
+
+  const handleDeleteLead = async () => {
+    setDeleteLoading(true);
+    try {
+      await deleteLead(selectedLead.id);
+      setShowDetailsModal(false);
+      setSelectedLead(null);
+      setShowDeleteConfirm(false);
+      loadLeads();
+    } catch (err) {
+      console.error("Delete lead error:", err);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -540,6 +559,17 @@ export default function Leads() {
                     />
                   </div>
 
+                  {/* Delete Lead */}
+                  <div className="border-t border-outline-variant pt-4">
+                    <button
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 rounded-md hover:bg-red-50 transition-colors text-sm font-medium"
+                    >
+                      <span className="material-symbols-outlined text-sm">delete</span>
+                      Delete Lead
+                    </button>
+                  </div>
+
                   {/* Assign Agent Section */}
                   <div className="border-t border-outline-variant pt-4">
                     <h5 className="text-sm font-semibold text-on-surface mb-3">Assign Agent</h5>
@@ -576,6 +606,42 @@ export default function Leads() {
                   No lead data found.
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= DELETE CONFIRMATION MODAL ================= */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowDeleteConfirm(false)}
+          />
+          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-sm mx-4">
+            <div className="p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                <span className="material-symbols-outlined text-red-600">warning</span>
+              </div>
+              <h3 className="text-lg font-semibold text-on-surface mb-2">Delete Lead</h3>
+              <p className="text-sm text-on-surface-variant mb-6">
+                Are you sure you want to delete <strong>{selectedLead?.name}</strong>? This action cannot be undone.
+              </p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-low transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteLead}
+                  disabled={deleteLoading}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium disabled:opacity-50"
+                >
+                  {deleteLoading ? "Deleting..." : "Delete"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

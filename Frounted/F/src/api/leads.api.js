@@ -25,6 +25,11 @@ export const assignLead = async (leadId, agentId) => {
   return response.data;
 };
 
+export const deleteLead = async (id) => {
+  const response = await api.delete(`/B/leads/${id}/`);
+  return response.data;
+};
+
 export const getAgents = async () => {
   const response = await api.get("/A/agents/");
   const data = response.data;

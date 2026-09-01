@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import LeadNote
 from .serilizer import LeadNotex
 from F_Activity_logs.models import ActivityLog
@@ -8,6 +10,23 @@ from F_Activity_logs.models import ActivityLog
 class LeadsNotes(ModelViewSet):
    # queryset=LeadNote.objects.all()
     serializer_class=LeadNotex
+
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    search_fields = [
+        "note",
+        "lead__name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = ["-created_at"]
 
     def get_queryset(self):
 
