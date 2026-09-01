@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getLeads, getLead, createLead } from "../api/leads.api";
+import { getLeads, getLead, createLead, assignLead, getAgents } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
@@ -19,6 +19,12 @@ export default function Leads() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [detailsLoading, setDetailsLoading] = useState(false);
+
+  // Assign Agent
+  const [agents, setAgents] = useState([]);
+  const [selectedAgent, setSelectedAgent] = useState("");
+  const [assignLoading, setAssignLoading] = useState(false);
+  const [assignError, setAssignError] = useState("");
 
   // Add Lead Modal
   const [showModal, setShowModal] = useState(false);
@@ -83,6 +89,37 @@ export default function Leads() {
     }
   };
 
+  const loadAgents = async () => {
+    try {
+      const data = await getAgents();
+      setAgents(data);
+    } catch (err) {
+      console.error("Failed to load agents:", err);
+    }
+  };
+
+  const handleAssign = async () => {
+    if (!selectedAgent) {
+      setAssignError("Please select an agent.");
+      return;
+    }
+    setAssignLoading(true);
+    setAssignError("");
+    try {
+      await assignLead(selectedLead.id, selectedAgent);
+      // Reload lead details
+      const data = await getLead(selectedLead.id);
+      setSelectedLead(data);
+      setSelectedAgent("");
+    } catch (err) {
+      console.error("Assign error:", err);
+      const data = err.response?.data;
+      setAssignError(data?.detail || data?.agent_id?.[0] || "Failed to assign lead.");
+    } finally {
+      setAssignLoading(false);
+    }
+  };
+
   const loadLeads = async () => {
     try {
       setLoading(true);
@@ -115,6 +152,7 @@ export default function Leads() {
 
   useEffect(() => {
     loadLeads();
+    loadAgents();
   }, [page, search]);
 
   return (
@@ -421,7 +459,7 @@ export default function Leads() {
               setSelectedLead(null);
             }}
           />
-          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-outline-variant">
               <h3 className="text-xl font-semibold text-on-surface">
@@ -500,6 +538,37 @@ export default function Leads() {
                           })
                         : null}
                     />
+                  </div>
+
+                  {/* Assign Agent Section */}
+                  <div className="border-t border-outline-variant pt-4">
+                    <h5 className="text-sm font-semibold text-on-surface mb-3">Assign Agent</h5>
+                    {assignError && (
+                      <div className="mb-3 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                        {assignError}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <select
+                        value={selectedAgent}
+                        onChange={(e) => setSelectedAgent(e.target.value)}
+                        className="flex-1 px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary text-sm h-10"
+                      >
+                        <option value="">-- Select Agent --</option>
+                        {agents.map((agent) => (
+                          <option key={agent.id} value={agent.id}>
+                            {agent.full_name || `${agent.first_name} ${agent.last_name}`} ({agent.email})
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={handleAssign}
+                        disabled={assignLoading || !selectedAgent}
+                        className="px-4 py-2 bg-primary text-on-primary rounded-md hover:bg-primary/90 transition-colors text-sm font-medium disabled:opacity-50 h-10"
+                      >
+                        {assignLoading ? "Assigning..." : "Assign"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : (

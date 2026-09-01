@@ -11,6 +11,10 @@ class CoustomUserCreateSerilizer(UserCreateSerializer):
     def validate_email(self,value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email Already exists.")
+
+        if not value.endswith("@asus.com"):
+            raise serializers.ValidationError("Email must end with @company.com")
+        
         return value
 
     id=serializers.UUIDField(read_only=True)
