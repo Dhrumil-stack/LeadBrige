@@ -27,5 +27,6 @@ export const assignLead = async (leadId, agentId) => {
 
 export const getAgents = async () => {
   const response = await api.get("/A/agents/");
-  return response.data;
+  const data = response.data;
+  return Array.isArray(data) ? data : data.results || [];
 };

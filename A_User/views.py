@@ -25,6 +25,7 @@ class UserCreateAPIView(CreateAPIView):
 class AgentListView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CoustomUser
+    pagination_class = None
 
     def get_queryset(self):
         return User.objects.filter(role="AGENT")
