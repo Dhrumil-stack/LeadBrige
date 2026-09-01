@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getLeads, createLead } from "../api/leads.api";
+import { getLeads, getLead, createLead } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function Leads() {
-  const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,6 +14,11 @@ export default function Leads() {
   const [previous, setPrevious] = useState(null);
 
   const [page, setPage] = useState(1);
+
+  // Lead Details Modal
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [detailsLoading, setDetailsLoading] = useState(false);
 
   // Add Lead Modal
   const [showModal, setShowModal] = useState(false);
@@ -265,7 +268,19 @@ export default function Leads() {
                       leads.map((lead) => (
                         <tr
                           key={lead.id}
-                          onClick={() => navigate(`/leads/${lead.id}`)}
+                          onClick={async () => {
+                            setDetailsLoading(true);
+                            setShowDetailsModal(true);
+                            try {
+                              const data = await getLead(lead.id);
+                              setSelectedLead(data);
+                            } catch (err) {
+                              console.error("Failed to load lead details:", err);
+                              setSelectedLead(lead);
+                            } finally {
+                              setDetailsLoading(false);
+                            }
+                          }}
                           className="hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                         >
                           {/* LEAD NAME */}
@@ -395,6 +410,107 @@ export default function Leads() {
         </main>
 
       </div>
+
+      {/* ================= LEAD DETAILS MODAL ================= */}
+      {showDetailsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => {
+              setShowDetailsModal(false);
+              setSelectedLead(null);
+            }}
+          />
+          <div className="relative bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-outline-variant">
+              <h3 className="text-xl font-semibold text-on-surface">
+                Lead Details
+              </h3>
+              <button
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setSelectedLead(null);
+                }}
+                className="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-high"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {detailsLoading ? (
+                <div className="py-10 text-center text-on-surface-variant">
+                  Loading lead details...
+                </div>
+              ) : selectedLead ? (
+                <div className="space-y-6">
+                  {/* Lead Identity */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-on-primary text-lg font-bold">
+                      {(selectedLead.name || "?")
+                        .split(" ")
+                        .map((w) => w[0])
+                        .filter(Boolean)
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-on-surface">
+                        {selectedLead.name || "-"}
+                      </h4>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest">
+                        {selectedLead.status || "-"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <DetailField label="Phone" value={selectedLead.phone} />
+                    <DetailField label="Email" value={selectedLead.email} />
+                    <DetailField label="Company" value={selectedLead.company_name} />
+                    <DetailField label="Source" value={selectedLead.source} />
+                    <DetailField label="Service Interest" value={selectedLead.service_interest} />
+                    <DetailField
+                      label="Deal Value"
+                      value={selectedLead.deal_value ? `₹${Number(selectedLead.deal_value).toLocaleString("en-IN")}` : null}
+                    />
+                    <DetailField label="Assigned To" value={selectedLead.assigned_to_name || "Unassigned"} />
+                    <DetailField label="Created By" value={selectedLead.created_by_name || "-"} />
+                    <DetailField
+                      label="Created At"
+                      value={selectedLead.created_at
+                        ? new Date(selectedLead.created_at).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : null}
+                    />
+                    <DetailField
+                      label="Next Follow-up"
+                      value={selectedLead.next_followup_at
+                        ? new Date(selectedLead.next_followup_at).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : null}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="py-10 text-center text-on-surface-variant">
+                  No lead data found.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ================= ADD LEAD MODAL ================= */}
       {showModal && (
@@ -551,6 +667,19 @@ export default function Leads() {
         </div>
       )}
 
+    </div>
+  );
+}
+
+function DetailField({ label, value }) {
+  return (
+    <div>
+      <span className="block text-xs text-on-surface-variant uppercase tracking-wider mb-1">
+        {label}
+      </span>
+      <span className="text-sm text-on-surface font-medium">
+        {value || "-"}
+      </span>
     </div>
   );
 }
