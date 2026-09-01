@@ -6,15 +6,20 @@ from .models import User
 class CoustomUserCreateSerilizer(UserCreateSerializer):
 
     def validate(self,attrs):
+        role = attrs.get('role')
+        email = attrs.get('email')
+
+        if role == 'AGENT' and email and not email.endswith('@asus.com'):
+            raise serializers.ValidationError({
+                'email': 'Agent emails must end with @asus.com.'
+            })
+
         return attrs
 
     def validate_email(self,value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email Already exists.")
 
-        if not value.endswith("@asus.com"):
-            raise serializers.ValidationError("Email must end with @company.com")
-        
         return value
 
     id=serializers.UUIDField(read_only=True)
