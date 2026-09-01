@@ -137,7 +137,8 @@ export default function Leads() {
     } catch (err) {
       console.error("Delete lead error:", err);
       const data = err.response?.data;
-      setDeleteError(data?.detail || "Failed to delete lead.");
+      const errors = data?.errors || data;
+      setDeleteError(errors?.detail || data?.detail || "Failed to delete lead.");
     } finally {
       setDeleteLoading(false);
     }
