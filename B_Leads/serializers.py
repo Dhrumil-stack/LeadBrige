@@ -31,9 +31,7 @@ class LeadSerializer(serializers.ModelSerializer):
         model = Lead
         fields = "__all__"
 
-    def __init__(self, *args, **kwargs):
-        print("🔥 LeadSerializer CALLED")
-        super().__init__(*args, **kwargs)
+
 
 class LeadAssignSerializer(serializers.Serializer):
 

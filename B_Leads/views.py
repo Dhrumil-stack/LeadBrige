@@ -230,26 +230,14 @@ class LeadViewSet(ModelViewSet):
         "assigned_to",
     ]
 
-    def list(self, request, *args, **kwargs):
-
-        print("========== LEAD API DEBUG ==========")
-        print("USER:", request.user)
-        print("USER ID:", getattr(request.user, "id", None))
-        print("AUTHENTICATED:", request.user.is_authenticated)
-        print("ROLE:", getattr(request.user, "role", None))
-        print("AUTH:", request.auth)
-        print("====================================")
-
-        return super().list(request, *args, **kwargs)
-
     def get_queryset(self):
 
         user = self.request.user
 
         if user.role == "ADMIN":
-            return Lead.objects.all().order_by("-created_at")
+            return Lead.objects.select_related('assigned_to', 'created_by').order_by("-created_at")
 
-        return Lead.objects.filter(
+        return Lead.objects.select_related('assigned_to', 'created_by').filter(
             models.Q(assigned_to=user) | models.Q(created_by=user)
         ).distinct().order_by("-created_at")
 

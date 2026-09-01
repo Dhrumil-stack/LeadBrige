@@ -33,9 +33,9 @@ class LeadsNotes(ModelViewSet):
         user = self.request.user
 
         if user.role == "ADMIN":
-            return LeadNote.objects.all()
+            return LeadNote.objects.select_related('lead', 'user').all()
 
-        return LeadNote.objects.filter( 
+        return LeadNote.objects.select_related('lead', 'user').filter(
             lead__assigned_to=user
         )
     

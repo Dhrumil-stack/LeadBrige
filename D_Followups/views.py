@@ -51,12 +51,12 @@ class FollowUps(ModelViewSet):
         user = self.request.user
 
         if user.role == "ADMIN":
-            return FollowUp.objects.all()
+            return FollowUp.objects.select_related('lead', 'assigned_to').all()
 
         elif user.role == "AGENT":
-            return FollowUp.objects.filter(
+            return FollowUp.objects.select_related('lead', 'assigned_to').filter(
                 assigned_to=user
-            ) | FollowUp.objects.filter(
+            ) | FollowUp.objects.select_related('lead', 'assigned_to').filter(
                 lead__created_by=user
             )
 

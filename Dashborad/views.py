@@ -8,18 +8,15 @@ from django.db.models import Count
 
 class DashBoradApiView(APIView):
     def get(self,request):
-        TotalLeads=Lead.objects.count()
-        New_Leads=Lead.objects.filter(status='NEW').count()
-        WON_Leads=Lead.objects.filter(status='WON').count()
-        INTERESTED_Leads=Lead.objects.filter(status='INTERESTED').count()
-        lost_leads = Lead.objects.filter(status="LOST").count()
+        from django.db.models import Q
+        counts = Lead.objects.aggregate(
+            TotalLeads=Count("id"),
+            New_Leads=Count("id", filter=Q(status="NEW")),
+            WON_Leads=Count("id", filter=Q(status="WON")),
+            INTERESTED_Leads=Count("id", filter=Q(status="INTERESTED")),
+        )
 
-        return Response({
-            "TotalLeads":TotalLeads,
-            "New_Leads":New_Leads,
-            "WON_Leads":WON_Leads,
-            "INTERESTED_Leads":INTERESTED_Leads,
-        })
+        return Response(counts)
 
 
 class DashboardFunnelView(APIView):

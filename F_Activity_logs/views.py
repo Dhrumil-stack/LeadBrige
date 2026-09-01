@@ -39,8 +39,8 @@ class ActivityLogs(ReadOnlyModelViewSet):
         from django.db import models
         user = self.request.user
         if user.role == "ADMIN":
-          return ActivityLog.objects.all()
-        return ActivityLog.objects.filter(
+          return ActivityLog.objects.select_related('lead', 'user').all()
+        return ActivityLog.objects.select_related('lead', 'user').filter(
             models.Q(lead__assigned_to=user) | models.Q(lead__created_by=user)
         ).distinct()
 

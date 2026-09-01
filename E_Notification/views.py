@@ -35,8 +35,6 @@ class Notificationtyy(ModelViewSet):
     ]
 
     def get_queryset(self):
-        print("USER:", self.request.user)
-        print("USER ID:", self.request.user.id)
         return Notification.objects.filter(user=self.request.user)
     
     def get_serializer_class(self):
