@@ -308,8 +308,6 @@ export default function FollowUps() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
 
       {/* ================= ADD FOLLOW-UP MODAL ================= */}
       {showModal && (
@@ -396,5 +394,7 @@ export default function FollowUps() {
         </div>
       )}
 
+      </div>
+    </div>
   );
 }
