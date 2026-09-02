@@ -25,6 +25,11 @@ export const assignLead = async (leadId, agentId) => {
   return response.data;
 };
 
+export const updateLead = async (id, data) => {
+  const response = await api.patch(`/B/leads/${id}/`, data);
+  return response.data;
+};
+
 export const deleteLead = async (id) => {
   const response = await api.delete(`/B/leads/${id}/`);
   return response.data;

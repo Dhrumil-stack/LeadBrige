@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getLeads, getLead, createLead, assignLead, deleteLead, getAgents } from "../api/leads.api";
+import { getLeads, getLead, createLead, updateLead, assignLead, deleteLead, getAgents } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 import NotificationBell from "../components/NotificationBell";
 
@@ -34,6 +34,10 @@ export default function Leads() {
   const [selectedAgent, setSelectedAgent] = useState("");
   const [assignLoading, setAssignLoading] = useState(false);
   const [assignError, setAssignError] = useState("");
+
+  // Status Update
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError] = useState("");
 
   // Add Lead Modal
   const [showModal, setShowModal] = useState(false);
@@ -129,6 +133,23 @@ export default function Leads() {
       setAssignError(data?.detail || data?.agent_id?.[0] || "Failed to assign lead.");
     } finally {
       setAssignLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    if (!selectedLead || newStatus === selectedLead.status) return;
+    setStatusLoading(true);
+    setStatusError("");
+    try {
+      const updated = await updateLead(selectedLead.id, { status: newStatus });
+      setSelectedLead((prev) => ({ ...prev, ...updated }));
+      // Also update in the list
+      setLeads((prev) => prev.map((l) => (l.id === selectedLead.id ? { ...l, status: newStatus } : l)));
+    } catch (err) {
+      console.error("Status update error:", err);
+      setStatusError(err.response?.data?.detail || "Failed to update status.");
+    } finally {
+      setStatusLoading(false);
     }
   };
 
@@ -564,9 +585,27 @@ export default function Leads() {
                       <h4 className="text-lg font-semibold text-on-surface">
                         {selectedLead.name || "-"}
                       </h4>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest">
-                        {selectedLead.status || "-"}
-                      </span>
+                      {statusLoading ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest animate-pulse">
+                          Updating...
+                        </span>
+                      ) : (
+                        <select
+                          value={selectedLead.status || "NEW"}
+                          onChange={(e) => handleStatusChange(e.target.value)}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest text-on-surface border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary cursor-pointer"
+                        >
+                          <option value="NEW">NEW</option>
+                          <option value="CONTACTED">CONTACTED</option>
+                          <option value="INTERESTED">INTERESTED</option>
+                          <option value="NEGOTIATION">NEGOTIATION</option>
+                          <option value="WON">WON</option>
+                          <option value="LOST">LOST</option>
+                        </select>
+                      )}
+                      {statusError && (
+                        <span className="text-label-sm text-error ml-2">{statusError}</span>
+                      )}
                     </div>
                   </div>
 
