@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getLead, assignLead, getAgents } from "../api/leads.api";
+import { getLead, assignLead, updateLead, getAgents } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
 
 export default function LeadDetails() {
@@ -8,6 +8,9 @@ export default function LeadDetails() {
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Status update
+  const [statusLoading, setStatusLoading] = useState(false);
 
   // Assign modal
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -78,6 +81,19 @@ export default function LeadDetails() {
       month: "short",
       year: "numeric",
     });
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    if (newStatus === lead.status) return;
+    setStatusLoading(true);
+    try {
+      await updateLead(lead.id, { status: newStatus });
+      setLead({ ...lead, status: newStatus });
+    } catch (err) {
+      console.error("Status update error:", err);
+    } finally {
+      setStatusLoading(false);
+    }
   };
 
   const getStatusBadge = (status) => {
@@ -171,7 +187,28 @@ export default function LeadDetails() {
                 <div>
                   <div className="flex items-center gap-3 mb-1">
                     <h1 className="text-3xl font-bold text-on-surface">{lead.name}</h1>
-                    {getStatusBadge(lead.status)}
+                    <select
+                      value={lead.status}
+                      onChange={(e) => handleStatusChange(e.target.value)}
+                      disabled={statusLoading}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border border-outline-variant bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer disabled:opacity-50 ${
+                        {
+                          NEW: "bg-blue-100 text-blue-800",
+                          CONTACTED: "bg-yellow-100 text-yellow-800",
+                          INTERESTED: "bg-purple-100 text-purple-800",
+                          NEGOTIATION: "bg-orange-100 text-orange-800",
+                          WON: "bg-green-100 text-green-800",
+                          LOST: "bg-red-100 text-red-800",
+                        }[lead.status] || "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      <option value="NEW">NEW</option>
+                      <option value="CONTACTED">CONTACTED</option>
+                      <option value="INTERESTED">INTERESTED</option>
+                      <option value="NEGOTIATION">NEGOTIATION</option>
+                      <option value="WON">WON</option>
+                      <option value="LOST">LOST</option>
+                    </select>
                   </div>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant mt-1">
                     {lead.phone && (
