@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
+import NotificationBell from "../components/NotificationBell";
 import { getFollowUps, createFollowUp } from "../api/followups.api";
 import { getLeads } from "../api/leads.api";
 
@@ -138,12 +139,7 @@ export default function FollowUps() {
             <span className="text-headline-sm font-bold text-primary">LeadBridge</span>
           </div>
           <div className="flex items-center gap-md justify-end w-1/3">
-            <button className="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <button className="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full">
-              <span className="material-symbols-outlined">settings</span>
-            </button>
+            <NotificationBell />
           </div>
         </header>
 

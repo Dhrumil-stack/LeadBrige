@@ -1,10 +1,10 @@
 from django.contrib import admin
 from . import models
-# Register your models here.
-
 
 
 @admin.register(models.Notification)
-
 class NotificationAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'user', 'title', 'is_read', 'created_at']
+    list_filter = ['is_read', 'created_at']
+    search_fields = ['title', 'message', 'user__email']
+    readonly_fields = ['created_at', 'updated_at']

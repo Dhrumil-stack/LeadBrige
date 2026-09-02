@@ -30,7 +30,6 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('A/',include('A_User.urls')),
     path("B/",include('B_Leads.urls')),
     path("C/",include('C_Leads_Notes.urls')),

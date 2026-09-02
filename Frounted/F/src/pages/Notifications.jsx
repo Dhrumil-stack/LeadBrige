@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
+import NotificationBell from "../components/NotificationBell";
 import { getNotifications, markAsRead } from "../api/notifications.api";
 
 const ACTION_ICONS = {
@@ -120,9 +121,7 @@ export default function Notifications() {
             <span className="text-headline-sm font-bold text-primary">LeadBridge</span>
           </div>
           <div className="flex items-center gap-md justify-end w-1/3">
-            <button className="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
+            <NotificationBell />
           </div>
         </header>
 
@@ -200,6 +199,9 @@ export default function Notifications() {
                         <div>
                           <h3 className={`text-body-md font-semibold ${!notif.is_read ? "text-primary" : "text-on-surface"}`}>{notif.title}</h3>
                           <p className="text-body-sm text-on-surface-variant mt-0.5">{notif.message}</p>
+                          {notif.user_name && (
+                            <p className="text-label-sm text-outline mt-1">By {notif.user_name}</p>
+                          )}
                         </div>
                         <div className="flex flex-col items-end gap-2 flex-shrink-0">
                           <span className={`text-label-sm flex items-center gap-1 ${!notif.is_read ? "text-primary" : "text-on-surface-variant"}`}>

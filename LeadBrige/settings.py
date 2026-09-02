@@ -35,8 +35,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "leadbrige-production-36b2.up.railway.app",
+    "lead-brige.vercel.app",
     "localhost",
     "127.0.0.1",
+    "*",
 ]
 
 # Application definition
@@ -81,6 +83,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://lead-brige.vercel.app",
+    "https://leadbrige-production-36b2.up.railway.app",
 ]
 
 #CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
@@ -199,9 +202,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 
 CELERY_ACCEPT_CONTENT = ["json"]
 

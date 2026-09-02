@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getLeads, getLead, createLead, assignLead, deleteLead, getAgents } from "../api/leads.api";
 import Sidebar from "../components/Sidebar";
+import NotificationBell from "../components/NotificationBell";
 
 export default function Leads() {
   const [leads, setLeads] = useState([]);
@@ -45,6 +46,7 @@ export default function Leads() {
     company_name: "",
     source: "WHATSAPP",
     service_interest: "SEO",
+    status: "NEW",
     deal_value: "",
   });
 
@@ -65,6 +67,7 @@ export default function Leads() {
         company_name: form.company_name || undefined,
         source: form.source,
         service_interest: form.service_interest,
+        status: form.status,
         deal_value: form.deal_value || 0,
       });
 
@@ -76,6 +79,7 @@ export default function Leads() {
         company_name: "",
         source: "WHATSAPP",
         service_interest: "SEO",
+        status: "NEW",
         deal_value: "",
       });
       loadLeads();
@@ -205,13 +209,7 @@ export default function Leads() {
           </h2>
 
           <div className="flex items-center gap-6">
-
-            <button className="text-on-surface-variant hover:text-primary transition-colors rounded-full p-2">
-              <span className="material-symbols-outlined">
-                notifications
-              </span>
-            </button>
-
+            <NotificationBell />
           </div>
 
         </header>
@@ -819,18 +817,37 @@ export default function Leads() {
                 </div>
               </div>
 
-              {/* Deal Value */}
-              <div>
-                <label className="block text-sm font-semibold text-on-surface mb-1">Deal Value</label>
-                <input
-                  name="deal_value"
-                  type="number"
-                  min="0"
-                  value={form.deal_value}
-                  onChange={handleFormChange}
-                  className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
-                  placeholder="0"
-                />
+              {/* Status + Deal Value */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-on-surface mb-1">Status</label>
+                  <select
+                    name="status"
+                    value={form.status}
+                    onChange={handleFormChange}
+                    className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                  >
+                    <option value="NEW">New</option>
+                    <option value="CONTACTED">Contacted</option>
+                    <option value="INTERESTED">Interested</option>
+                    <option value="NEGOTIATION">Negotiation</option>
+                    <option value="WON">Won</option>
+                    <option value="LOST">Lost</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-on-surface mb-1">Deal Value</label>
+                  <input
+                    name="deal_value"
+                    type="number"
+                    min="0"
+                    value={form.deal_value}
+                    onChange={handleFormChange}
+                    className="w-full px-3 py-2 border border-outline-variant rounded-md bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm h-10"
+                    placeholder="0"
+                  />
+                </div>
               </div>
 
               {/* Actions */}

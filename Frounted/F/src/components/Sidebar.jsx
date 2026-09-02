@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "./Logo";
 
 const navItems = [
   { label: "Dashboard", icon: "dashboard", to: "/dashboard" },
@@ -17,18 +18,8 @@ export default function Sidebar({ active }) {
   return (
     <nav className="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-primary-container flex flex-col py-6">
       {/* Brand */}
-      <div className="px-6 mb-8 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
-          <span className="material-symbols-outlined">add</span>
-        </div>
-        <div>
-          <h1 className="text-headline-md font-bold text-on-primary">
-            LeadBridge
-          </h1>
-          <p className="font-body text-body-sm text-on-primary-container">
-            Sales CRM
-          </p>
-        </div>
+      <div className="px-6 mb-8">
+        <Logo />
       </div>
 
       {/* New Lead button */}
