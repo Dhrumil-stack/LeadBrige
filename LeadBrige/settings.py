@@ -217,6 +217,8 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+
 DJOSER={
     'LOGIN_FIELD': 'email',
     'SERIALIZERS':{

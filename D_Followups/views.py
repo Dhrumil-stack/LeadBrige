@@ -69,6 +69,24 @@ class FollowUps(ModelViewSet):
 
     #     return FollowUpSeriliuzer
 
+    @action(detail=False, methods=["get"])
+    def stats(self, request):
+        """Return live counts for today, pending, missed, and completed follow-ups."""
+        qs = self.get_queryset()
+        today = timezone.now().date()
+        today_count = qs.filter(due_date__date=today).count()
+        pending_count = qs.filter(status="PENDING").count()
+        missed_count = qs.filter(status="MISSED").count()
+        completed_count = qs.filter(status="COMPLETED").count()
+        total_count = qs.count()
+        return Response({
+            "today_count": today_count,
+            "pending_count": pending_count,
+            "missed_count": missed_count,
+            "completed_count": completed_count,
+            "total_count": total_count,
+        })
+
     @action(detail=True, methods=["post"])
     def complete(self, request, pk=None):
 
