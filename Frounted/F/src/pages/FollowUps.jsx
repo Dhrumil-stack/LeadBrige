@@ -95,7 +95,8 @@ export default function FollowUps() {
     return matchSearch && matchStatus;
   });
 
-  const today = new Date().toISOString().split("T")[0];
+  const todayObj = new Date();
+  const today = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, "0")}-${String(todayObj.getDate()).padStart(2, "0")}`;
   const todayCount = followUps.filter((f) => f.due_date?.startsWith(today)).length;
   const pendingCount = followUps.filter((f) => f.status === "PENDING").length;
   const completedCount = followUps.filter((f) => f.status === "COMPLETED").length;
