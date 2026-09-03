@@ -96,8 +96,13 @@ export default function FollowUps() {
   });
 
   const todayObj = new Date();
-  const today = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, "0")}-${String(todayObj.getDate()).padStart(2, "0")}`;
-  const todayCount = followUps.filter((f) => f.due_date?.startsWith(today)).length;
+  const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, "0")}-${String(todayObj.getDate()).padStart(2, "0")}`;
+  const todayCount = followUps.filter((f) => {
+    if (!f.due_date) return false;
+    const d = new Date(f.due_date);
+    const dueStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    return dueStr === todayStr;
+  }).length;
   const pendingCount = followUps.filter((f) => f.status === "PENDING").length;
   const completedCount = followUps.filter((f) => f.status === "COMPLETED").length;
   const missedCount = followUps.filter((f) => f.status === "MISSED").length;
